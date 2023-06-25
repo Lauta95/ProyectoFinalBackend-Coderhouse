@@ -3,7 +3,7 @@ import express from 'express'
 const app = express()
 app.use(express.json()) //esto es para recibir un formato de tipo json en el body
 
-const users = []
+let users = []
 
 app.get('/api/user', (req, res) => {
     res.json(users)
