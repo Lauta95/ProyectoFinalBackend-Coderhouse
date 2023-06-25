@@ -18,9 +18,32 @@ app.post('/api/user', (req, res) => {
 })
 
 app.put('/api/user/:id', (req, res) => {
-    const { id } = req.params
+    const id = parseInt(req.params.id) //al ser estrictamente igual, los params vienen por string, hay que convertir el req.params a entero
+    const user = req.body
 
-    res.send(`el id modificada es ${id}`)
+    const userUbicado = users.findIndex(u => u.id === id) //u representa cada uno de los usuarios. u es el id buscado
+
+    if (userUbicado < 0) {
+        return res.status(404).json({ status: 'error', message: 'user not found' })
+    }
+
+    users[userUbicado] = user
+
+    res.json({ status: 'success', message: 'actualizado' })
+})
+
+app.delete('/api/user/:id', (req, res) => {
+    const id = parseInt(req.params.id)
+
+    const userUbicado = users.findIndex(u => u.id === id) //u representa cada uno de los usuarios. u es el id buscado
+
+    if (userUbicado < 0) {
+        return res.status(404).json({ status: 'error', message: 'user not found' })
+    }
+
+    users = users.filter(u => u.id !== id)
+    console.log(users);
+    res.send({ status: 'success', message: 'eliminado' })
 })
 
 app.listen(8080)
