@@ -1,4 +1,7 @@
 import { Router } from 'express'
+import ProductManager from './funciones.js';
+const productManager = new ProductManager();
+
 
 const router = Router()
 
