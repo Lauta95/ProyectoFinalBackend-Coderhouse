@@ -1,7 +1,8 @@
+import express from 'express'
 import { Router } from 'express'
-import ProductManager from './funciones.js';
+import ProductManager from '../services/product.service.js';
 const productManager = new ProductManager();
-
+const app = express()
 
 const router = Router()
 
