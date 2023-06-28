@@ -6,6 +6,12 @@ const app = express()
 
 const router = Router()
 
+const users = []
+
+router.get('/', (req,res) =>{
+    res.send({users})
+})
+
 app.get('/products', async (req, res) => {
     const limit = req.query.limit;
     try {

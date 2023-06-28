@@ -4,6 +4,9 @@ import productsRouter from './routes/products.router.js'
 const app = express()
 app.use(express.json())
 
-app.get('/', productsRouter)
+app.use('/api/users', productsRouter)
+app.use('/health', (req, res) => {
+    res.send('okkk')
+})
 
 app.listen(8080)
