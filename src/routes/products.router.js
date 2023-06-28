@@ -8,8 +8,12 @@ const router = Router()
 
 const users = []
 
-router.get('/', (req,res) =>{
-    res.send({users})
+router.get('/', (req, res) => {
+    res.send(users)
+})
+
+router.get('/user', (req, res) => {
+    res.send('Devuelve todos los users')
 })
 
 app.get('/products', async (req, res) => {
