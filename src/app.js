@@ -7,5 +7,4 @@ app.use(express.json())
 // middleware
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
-// app.get("/", (req, res) => {   res.send("hello world") })
 app.listen(8080)
