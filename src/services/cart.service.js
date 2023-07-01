@@ -12,7 +12,7 @@ export default class CartManager extends FileManager {
     }
 
     addProduct = async(idc, idp) =>{
-        const cart = awaitthis.getById(idc)
+        const cart = await this.getById(idc)
         cart.products.push(idp)
 
         return await this.update(cart)
