@@ -1,12 +1,11 @@
 import express from 'express'
-import productsRouter from './routes/products.router.js'
-
+import productRouter from './routes/product.router.js'
+import cartRouter from './routes/cart.router.js'
 const app = express()
-app.use(express.json())
+// app.use(express.json())
 
-app.use('/api/users', productsRouter)
-app.use('/health', (req, res) => {
-    res.send('okkk')
-})
+// middleware
+app.use('/api/products', productRouter)
+app.use('/api/carts', cartRouter)
 
 app.listen(8080)
