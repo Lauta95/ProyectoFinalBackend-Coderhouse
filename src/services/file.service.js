@@ -31,10 +31,14 @@ class FileManager {
         console.log(data);
         const list = await this.get()
         const idx = list.findIndex(a => a.id == id)
-        console.log(idx);
         list[idx] = data
         list[idx].id = +id
-        console.log(list);
+        return fs.promises.writeFile(this.filename, JSON.stringify(list))
+    }
+    updateCart = async (data) => {
+        const list = await this.get()
+        const idx = list.findIndex(a => a.id == data.id)
+        list[idx] = data
         return fs.promises.writeFile(this.filename, JSON.stringify(list))
     }
     delete = async (id) => {
