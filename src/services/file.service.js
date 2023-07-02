@@ -37,6 +37,11 @@ class FileManager {
         console.log(list);
         return fs.promises.writeFile(this.filename, JSON.stringify(list))
     }
+    delete = async (id) => {
+        const list = await this.get();
+        const updatedList = list.filter((item) => item.id != id);
+        return fs.promises.writeFile(this.filename, JSON.stringify(updatedList));
+    };
 }
 
 export default FileManager
