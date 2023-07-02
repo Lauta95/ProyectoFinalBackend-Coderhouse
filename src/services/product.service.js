@@ -1,5 +1,5 @@
 import FileManager from "./file.service.js";
-
+import Error from '../helpers/error.js'
 export default class ProductManager extends FileManager {
     constructor() {
         super('./products.json')
@@ -18,7 +18,7 @@ export default class ProductManager extends FileManager {
     updateProduct = async (data, id) => {
         let productExist = await this.getById(id)
         if(!productExist){
-            throw new Error('id no encontrado')
+            throw new Error('id no encontrado', 404)
         }
         await this.update(data, id);
         return 'ok';

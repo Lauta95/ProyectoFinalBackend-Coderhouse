@@ -55,8 +55,9 @@ router.put('/:pid', async (req, res) => {
         const updatedProduct = await productManager.updateProduct(updatedData, productId);
         res.send(updatedProduct);
     } catch (error) {
-        console.log(error);
-        res.status(404).json({ error });
+        const status = error.status || 400
+        console.log(error.message);
+        res.status(status).json( error.message );
     }
 });
 
