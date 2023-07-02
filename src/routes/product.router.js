@@ -46,7 +46,18 @@ router.post('/', async (req, res) => {
     res.send(result)
 })
 // actualizar un producto existente por su id router.put
-
+router.put('/:pid', async (req, res) => {
+    const productId = req.params.pid;
+    const updatedData = req.body;
+    
+    console.log(updatedData);
+    try {
+        const updatedProduct = await productManager.update(productId, updatedData);
+        res.send(updatedProduct);
+    } catch (error) {
+        res.status(404).json({ error: 'Producto no encontrado' });
+    }
+});
 
 // eliminar un producto por su id router.delete
 
