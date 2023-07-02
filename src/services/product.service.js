@@ -8,8 +8,12 @@ export default class ProductManager extends FileManager {
         const result = await this.set(data)
         return result
     }
-    list = async () => {
-        const result = await this.get()
-        return result
+    list = async (limit) => {
+        const result = await this.get();
+        if (limit) {
+            return result.slice(0, limit);
+        }
+        console.log(result);
+        return result;
     }
 }
