@@ -49,13 +49,14 @@ router.post('/', async (req, res) => {
 router.put('/:pid', async (req, res) => {
     const productId = req.params.pid;
     const updatedData = req.body;
-    
-    console.log(updatedData);
+    // console.log(productId);
+    // console.log(updatedData);
     try {
-        const updatedProduct = await productManager.update(productId, updatedData);
+        const updatedProduct = await productManager.updateProduct(updatedData, productId);
         res.send(updatedProduct);
     } catch (error) {
-        res.status(404).json({ error: 'Producto no encontrado' });
+        console.log(error);
+        res.status(404).json({ error });
     }
 });
 

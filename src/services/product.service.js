@@ -13,18 +13,14 @@ export default class ProductManager extends FileManager {
         if (limit) {
             return result.slice(0, limit);
         }
-        console.log(result);
         return result;
     }
-    update = async (id, data) => {
-        const product = await this.getById(id);
-        if (!product) {
-            console.log(product);
-            throw new Error('Producto no encontrado');
+    updateProduct = async (data, id) => {
+        let productExist = await this.getById(id)
+        if(!productExist){
+            throw new Error('id no encontrado')
         }
-        const updatedProduct = { ...product, ...data };
-        await this.update(updatedProduct);
-        // console.log(updatedProduct);
-        return updatedProduct;
+        await this.update(data, id);
+        return 'ok';
     }
 }

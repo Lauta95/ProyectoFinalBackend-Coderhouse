@@ -18,7 +18,8 @@ class FileManager {
     }
     getById = async (id) => {
         const data = await this.get()
-        return data.find(d => d.id == id)
+        let product = data.find(d => d.id == id)
+        return product
     }
     set = async (data) => {
         const list = await this.get()
@@ -26,10 +27,14 @@ class FileManager {
         list.push(data)
         return fs.promises.writeFile(this.filename, JSON.stringify(list))
     }
-    update = async (data) => {
+    update = async (data, id) => {
+        console.log(data);
         const list = await this.get()
-        const idx = list.findIndex(a => a.id == data.id)
+        const idx = list.findIndex(a => a.id == id)
+        console.log(idx);
         list[idx] = data
+        list[idx].id = +id
+        console.log(list);
         return fs.promises.writeFile(this.filename, JSON.stringify(list))
     }
 }
