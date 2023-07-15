@@ -1,0 +1,61 @@
+<h2 class="titulo">Products Real Time</h2>
+
+  <div class="container">
+    <h2>Formulario de Productos</h2>
+    {{!-- el formulario esta vez no tendrá ni acción ni método porque se hará desde vanilla js --}}
+    <form id="myForm">
+      <div class="form-group">
+        <label for="code">Code:</label>
+        <input type="text" id="code" name="code" required>
+      </div>
+      <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required>
+      </div>
+      <div class="form-group">
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" required>
+      </div>
+      <div class="form-group">
+        <label for="thumbnails">Thumbnails:</label>
+        <input type="text" id="thumbnails" name="thumbnails" required>
+      </div>
+      <div class="form-group">
+        <label for="stock">Stock:</label>
+        <input type="number" id="stock" name="stock" required>
+      </div>
+      <div class="form-group">
+        <button type="submit">Enviar</button>
+      </div>
+    </form>
+
+ <table>
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Thumbnails</th>
+        <th>Stock</th>
+        <th>ID</th>
+      </tr>
+    </thead>
+    <tbody>
+        {{#each products}}
+            <tr>
+                <td>{{this.code}}</td>
+                <td>{{this.title}}</td>
+                <td>{{this.description}}</td>
+                <td>{{this.price}}</td>
+                <td>{{this.thumbnails}}</td>
+                <td>{{this.stock}}</td>
+                <td>{{this.id}}</td>
+            </tr>
+        {{/each}}
+    </tbody>
+  </table>
