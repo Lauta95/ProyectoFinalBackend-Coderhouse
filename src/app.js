@@ -4,6 +4,7 @@ import { Server } from 'socket.io'
 import cartRouter from './routes/cart.router.js'
 import viewsRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
+import ProductManager from './services/product.service.js'
 import __dirname from './utils.js'
 const app = express()
 app.use(express.urlencoded({ extended: true }))
@@ -23,7 +24,11 @@ const httpServer = app.listen(8080)
 const io = new Server(httpServer)
 
 io.on('connection', socket => {
-    socket.on('new-product', data => {
-        console.log(data);
+    socket.on('new-product', async data => {
+        const productManager = new ProductManager()
+        await productManager.create(data)
+
+        const products = await productManager.list()
+        socket.emit('reload-table', products)
     })
 })

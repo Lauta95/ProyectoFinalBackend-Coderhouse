@@ -1,38 +1,37 @@
-<h2 class="titulo">Products Real Time</h2>
+<h1 class="titulo">Products Real Time</h1>
 
   <div class="container">
     <h2>Formulario de Productos</h2>
-    {{!-- el formulario esta vez no tendrá ni acción ni método porque se hará desde vanilla js --}}
-    {{!-- el .js es index.js --}}
     <form id="myForm">
       <div class="form-group">
         <label for="code">Code:</label>
-        <input type="text" id="code" name="code" >
+        <input type="text" id="code" name="code">
       </div>
       <div class="form-group">
         <label for="title">Title:</label>
-        <input type="text" id="title" name="title" >
+        <input type="text" id="title" name="title">
       </div>
       <div class="form-group">
         <label for="description">Description:</label>
-        <input type="text" id="description" name="description" >
+        <input type="text" id="description" name="description">
       </div>
       <div class="form-group">
         <label for="price">Price:</label>
-        <input type="number" id="price" name="price" >
+        <input type="number" id="price" name="price">
       </div>
       <div class="form-group">
         <label for="thumbnails">Thumbnails:</label>
-        <input type="text" id="thumbnails" name="thumbnails" >
+        <input type="text" id="thumbnails" name="thumbnails">
       </div>
       <div class="form-group">
         <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock" >
+        <input type="number" id="stock" name="stock">
       </div>
       <div class="form-group">
-        <button type="submit">Enviar</button>
+        <button type="submit" id="testt">Enviar</button>
       </div>
     </form>
+  </div>
 
  <table>
     <thead>
@@ -46,7 +45,7 @@
         <th>ID</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id="tbody">
         {{#each products}}
             <tr>
                 <td>{{this.code}}</td>
@@ -61,3 +60,43 @@
     </tbody>
   </table>
 
+<script>
+  const socket = io()
+
+
+document.getElementById('myForm').onsubmit = e => {
+    e.preventDefault()
+
+    const code = document.querySelector('input[name=code]').value
+    const title = document.querySelector('input[name=title]').value
+    const description = document.querySelector('input[name=description]').value
+    const price = parseInt(document.querySelector('input[name=price]').value)
+    const thumbnails = document.querySelector('input[name=thumbnails]').value
+    const stock = parseInt(document.querySelector('input[name=stock]').value)
+    
+    const product = {code, title, description, price, thumbnails, stock}
+    socket.emit('new-product', product)
+}
+
+socket.on('reload-table', products => {
+  console.log(products)
+  const tbody = document.getElementById('tbody')
+
+  let html = ''
+  
+  products.forEach(product => {
+    html += `<tr>
+    <td>${product.code}</td>
+    <td>${product.title}</td>
+    <td>${product.description}</td>
+    <td>${product.price}</td>
+    <td>${product.thumbnails}</td>
+    <td>${product.stock}</td>
+    <td>${product.id}</td>
+    </tr>
+    `
+  })
+  tbody.innerHTML = html
+})
+
+</script>
