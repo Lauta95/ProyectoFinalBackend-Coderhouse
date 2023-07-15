@@ -3,30 +3,31 @@
   <div class="container">
     <h2>Formulario de Productos</h2>
     {{!-- el formulario esta vez no tendrá ni acción ni método porque se hará desde vanilla js --}}
+    {{!-- el .js es index.js --}}
     <form id="myForm">
       <div class="form-group">
         <label for="code">Code:</label>
-        <input type="text" id="code" name="code" required>
+        <input type="text" id="code" name="code" >
       </div>
       <div class="form-group">
         <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
+        <input type="text" id="title" name="title" >
       </div>
       <div class="form-group">
         <label for="description">Description:</label>
-        <input type="text" id="description" name="description" required>
+        <input type="text" id="description" name="description" >
       </div>
       <div class="form-group">
         <label for="price">Price:</label>
-        <input type="number" id="price" name="price" required>
+        <input type="number" id="price" name="price" >
       </div>
       <div class="form-group">
         <label for="thumbnails">Thumbnails:</label>
-        <input type="text" id="thumbnails" name="thumbnails" required>
+        <input type="text" id="thumbnails" name="thumbnails" >
       </div>
       <div class="form-group">
         <label for="stock">Stock:</label>
-        <input type="number" id="stock" name="stock" required>
+        <input type="number" id="stock" name="stock" >
       </div>
       <div class="form-group">
         <button type="submit">Enviar</button>
@@ -59,3 +60,4 @@
         {{/each}}
     </tbody>
   </table>
+
