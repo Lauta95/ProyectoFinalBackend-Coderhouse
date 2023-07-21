@@ -29,6 +29,6 @@ io.on('connection', socket => {
         await productManager.create(data)
 
         const products = await productManager.list()
-        socket.emit('reload-table', products)
+        io.emit('reload-table', products)
     })
 })
