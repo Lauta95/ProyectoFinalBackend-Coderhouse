@@ -1,5 +1,5 @@
 import FileManager from "./file.service.js";
-import Error from '../helpers/error.js'
+import Error from '../../helpers/error.js'
 export default class ProductManager extends FileManager {
     constructor() {
         super('./products.json')

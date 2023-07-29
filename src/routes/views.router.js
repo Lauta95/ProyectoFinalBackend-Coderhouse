@@ -1,7 +1,7 @@
 // esta vista tendrá solo renderización
 
 import { Router } from 'express';
-import ProductManager from '../services/product.service.js';
+import ProductManager from '../DAO/fileManager/file.service.js';
 
 const router = Router()
 const productManager = new ProductManager()

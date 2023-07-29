@@ -1,8 +1,7 @@
 import { Router } from 'express'
-import ProductManager from '../services/product.service.js'
+import ProductModel from '../DAO/mongoManager/models/product.model.js'
 
 const router = Router()
-const productManager = new ProductManager()
 // obtener todos los productos con un limit
 router.get('/', async (req, res) => {
     const limit = req.query.limit;

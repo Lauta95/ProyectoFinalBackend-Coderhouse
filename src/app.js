@@ -4,7 +4,7 @@ import { Server } from 'socket.io'
 import cartRouter from './routes/cart.router.js'
 import viewsRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
-import ProductManager from './services/product.service.js'
+import ProductManager from './DAO/fileManager/product.service.js'
 import __dirname from './utils.js'
 const app = express()
 app.use(express.urlencoded({ extended: true }))
