@@ -5,7 +5,7 @@ const router = Router()
 // obtener todos los productos con un limit
 router.get('/', async (req, res) => {
     const limit = req.query.limit;
-    const result = await productManager.list(limit)
+    const result = await ProductModel.list(limit)
     res.send(result)
 })
 // obtener un producto por su id router.get
@@ -13,7 +13,7 @@ router.get('/:id', async (req, res) => {
     const productId = req.params.id; // Obtener el ID del producto desde los parámetros de la URL
 
     try {
-        const product = await productManager.getById(productId);
+        const product = await ProductModel.getById(productId);
         if (product) {
             res.json(product);
         } else {
@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
         category,
         thumbnails
     }
-    const result = await productManager.create(data)
+    const result = await ProductModel.create(data)
     res.send(result)
 })
 // actualizar un producto existente por su id router.put
@@ -62,7 +62,7 @@ router.put('/:pid', async (req, res) => {
         thumbnails
     }
     try {
-        const updatedProduct = await productManager.updateProduct(updatedData, productId);
+        const updatedProduct = await ProductModel.updateProduct(updatedData, productId);
         res.send(updatedProduct);
     } catch (error) {
         const status = error.status || 400
@@ -75,7 +75,7 @@ router.delete('/:pid', async (req, res) => {
     const productId = req.params.pid;
 
     try {
-        await productManager.deleteProduct(productId);
+        await ProductModel.deleteProduct(productId);
         res.send('Producto eliminado correctamente');
     } catch (error) {
         const status = error.status || 400;
