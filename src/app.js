@@ -38,11 +38,17 @@ const runServer = () => {
 
 // mongoose.set('strictQuery', false)
 console.log('connecting');
-mongoose.connect('mongodb://admin:admin@127.0.0.1:27017', {
-    dbName: 'ecommerce_project'
+mongoose.connect('mongodb://127.0.0.1:27017/ecommerce_project', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    dbName: 'ecommerce_project',
 })
     .then(() => {
         console.log('DB connected!');
         runServer()
     })
     .catch(e => console.log("can't connect to db"))
+
+mongoose.connection.on('error', (error) => {
+    console.error('Error connecting to MongoDB:', error.message);
+});

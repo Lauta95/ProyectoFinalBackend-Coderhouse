@@ -5,7 +5,7 @@ const router = Router()
 // obtener todos los productos con un limit
 router.get('/', async (req, res) => {
     const limit = req.query.limit;
-    const result = await ProductModel.list(limit)
+    const result = await ProductModel.find(limit)
     res.send(result)
 })
 // obtener un producto por su id router.get
