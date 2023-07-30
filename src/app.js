@@ -21,6 +21,8 @@ app.use('/', viewsRouter)
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 
+const URL = "mongodb+srv://freecodecamp-user:fDlfjlzTXxxBhYva@cluster0.vw59urg.mongodb.net/?retryWrites=true&w=majority"
+
 const runServer = () => {
     const httpServer = app.listen(8080, () => console.log('listening...'))
     const io = new Server(httpServer)
@@ -38,10 +40,10 @@ const runServer = () => {
 
 // mongoose.set('strictQuery', false)
 console.log('connecting');
-mongoose.connect('mongodb://127.0.0.1:27017/ecommerce_project', {
+mongoose.connect(URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    dbName: 'ecommerce_project',
+    dbName: 'ecommerce',
 })
     .then(() => {
         console.log('DB connected!');
