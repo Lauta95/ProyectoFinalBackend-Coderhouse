@@ -1,17 +1,61 @@
-// const socket = io()
+const socket = io();
+const chatbox = document.getElementById("chatbox");
+let user = sessionStorage.getItem("user") || "";
 
+//SweetAlert
+if (!user) {
+  Swal.fire({
+    title: "Auth",
+    input: "text",
+    text: "Set username",
+    inputValidator: (value) => {
+      return !value.trim() && "Please write a username";
+    },
+    allowOutsideClick: false,
+  }).then((result) => {
+    user = result.value;
+    document.getElementById("username").innerHTML = user;
+    sessionStorage.setItem("user", user);
+    socket.emit("new", user);
+  });
+} else {
+  document.getElementById("username").innerHTML = user;
+  socket.emit("new", user);
+}
 
-// document.getElementById('myForm').onsubmit = e => {
-//     e.preventDefault()
+//Enviar mensajes
+chatbox.addEventListener("keyup", (event) => {
+  console.log('ok');
+  if (event.key === "Enter") {
+    const msn = chatbox.value.trim();
 
-//     const name = document.querySelector('input[name=code]').value
-//     const title = document.querySelector('input[name=title]').value
-//     const description = document.querySelector('input[name=description]').value
-//     const price = parseInt(document.querySelector('input[name=price]').value)
-//     const thumbnails = document.querySelector('input[name=thumbnails]').value
-//     const stock = parseInt(document.querySelector('input[name=stock]').value)
-    
-//     const product = {name, title, description, price, thumbnails, stock}
-//     socket.emit('new-product', product)
-//     console.log(product);
-// }
+    if (msn.length > 0) {
+      const date = new Date();
+      const hourDate = date.getHours();
+      const minuteDate = date.getMinutes();
+      const hour = `${hourDate}:${minuteDate}`;
+
+      socket.emit("client:message", {
+        user,
+        message: msn,
+        hour: hour,
+      });
+
+      chatbox.value = "";
+    }
+  }
+});
+
+//Recibir mensajes
+socket.on("server:messages", (data) => {
+  const divLogs = document.getElementById("logs");
+  let messages = "";
+
+  data.forEach((message) => {
+    messages =
+      `<p><b>${message.user}:</b> ${message.message}<i style="font-size: x-small; margin-left: 5px;">${message.hour}</i></p>` +
+      messages;
+  });
+
+  divLogs.innerHTML = messages;
+});

@@ -78,3 +78,8 @@ table {
 .form-group button:hover {
   background-color: #45a049;
 }
+
+body {
+  font-family: 'Agdasima', sans-serif;
+  text-align: center;
+}
