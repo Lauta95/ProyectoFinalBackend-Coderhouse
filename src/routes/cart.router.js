@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 })
 router.get('/:cid/', async (req, res) => {
     const cid = req.params.cid
-    const result = await CartModel.getById(cid)
+    const result = await CartModel.findById(cid)
     res.send(result)
 })
 router.post('/', async (req, res) => {
@@ -22,9 +22,17 @@ router.post('/:cid/product/:pid', async (req, res) => {
     const pid = req.params.pid;
     const quantity = req.query.quantity || 1
 
-    const cart = await CartModel.findById(cid)
-    cart.products.push({ id: pid, quantity })
-    const result = cart.save()
+    const cart = await CartModel.findOne({ _id: cid })
+
+    const existingProduct = cart.products.find(product => product.id === pid)
+    if (existingProduct) {
+        existingProduct.quantity += parseInt(quantity, 10)
+    } else {
+        cart.products.push({ id: pid, quantity })
+    }
+
+    const result = await cart.save()
     res.send(result);
 });
+
 export default router

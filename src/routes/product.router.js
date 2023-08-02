@@ -4,16 +4,16 @@ import ProductModel from '../DAO/mongoManager/models/product.model.js'
 const router = Router()
 // obtener todos los productos con un limit
 router.get('/', async (req, res) => {
-    const limit = req.query.limit;
-    const result = await ProductModel.find(limit)
-    res.send(result)
-})
+    const limit = parseInt(req.query.limit) || undefined;
+    const result = await ProductModel.find().limit(limit);
+    res.send(result);
+});
 // obtener un producto por su id router.get
 router.get('/:id', async (req, res) => {
-    const productId = req.params.id; // Obtener el ID del producto desde los parámetros de la URL
+    const productId = req.params.id;
 
     try {
-        const product = await ProductModel.getById(productId);
+        const product = await ProductModel.findById(productId);
         if (product) {
             res.json(product);
         } else {
@@ -62,12 +62,16 @@ router.put('/:pid', async (req, res) => {
         thumbnails
     }
     try {
-        const updatedProduct = await ProductModel.updateProduct(updatedData, productId);
-        res.send(updatedProduct);
+        // updateOne para actualizar el producto por su id
+        const updatedProduct = await ProductModel.updateOne({ _id: productId }, updatedData);
+        if (updatedProduct.nModified > 0) {
+            res.send('Producto actualizado correctamente');
+        } else {
+            res.status(404).json({ error: 'Producto no encontrado' });
+        }
     } catch (error) {
-        const status = error.status || 400
         console.log(error.message);
-        res.status(status).json(error.message);
+        res.status(500).json({ error: 'Error al actualizar el producto' });
     }
 });
 // eliminar un producto por su id router.delete
@@ -75,12 +79,16 @@ router.delete('/:pid', async (req, res) => {
     const productId = req.params.pid;
 
     try {
-        await ProductModel.deleteProduct(productId);
-        res.send('Producto eliminado correctamente');
+        // deleteOne para borrar el producto por su id
+        const deletedProduct = await ProductModel.deleteOne({ _id: productId });
+        if (deletedProduct.deletedCount > 0) {
+            res.send('Producto eliminado correctamente');
+        } else {
+            res.status(404).json({ error: 'Producto no encontrado' });
+        }
     } catch (error) {
-        const status = error.status || 400;
         console.log(error.message);
-        res.status(status).json(error.message);
+        res.status(500).json({ error: 'Error al eliminar el producto' });
     }
 });
 export default router
