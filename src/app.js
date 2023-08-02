@@ -4,6 +4,7 @@ import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import cartRouter from './routes/cart.router.js'
 import chatRouter from './routes/chat.router.js'
+import ChatModel from './DAO/mongoManager/models/message.model.js'
 import viewsRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
 import ProductManager from './DAO/fileManager/product.service.js'
@@ -44,9 +45,15 @@ const runServer = () => {
             messages.push(data)
             io.emit('logs', messages)
         })
-        socket.on('client:message', data => {
+        socket.on('client:message', async data => {
             console.log('Data received from client:', data);
             messages.push(data);
+            try {
+                const savedMessage = await ChatModel.create(data);
+                console.log('Message saved:', savedMessage);
+            } catch (error) {
+                console.error('Error saving message:', error);
+            }
             console.log('Current messages:', messages);
             io.emit('server:messages', messages);
         })
