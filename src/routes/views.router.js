@@ -1,13 +1,22 @@
 // esta vista tendrá solo renderización
-
 import { Router } from 'express';
 import ProductManager from '../DAO/fileManager/product.service.js';
+import ProductModel from '../DAO/mongoManager/models/product.model.js'
 
 const router = Router()
 const productManager = new ProductManager()
 
 router.get('/', (req, res) => {
     res.render('index', {})
+})
+
+router.get('/list', async (req, res) => {
+    const result = await ProductModel.paginate({}, {
+        page: 1,
+        limit: 10,
+        lean: true
+    })
+    res.render('productsList', result)
 })
 
 router.get('/products', async (req, res) => {
