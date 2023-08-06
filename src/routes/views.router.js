@@ -11,7 +11,21 @@ router.get('/', (req, res) => {
 })
 
 router.get('/list', async (req, res) => {
-    const result = await ProductModel.paginate({}, {
+
+    const page = parseInt(req.query?.page || 1)
+    const limit = parseInt(req.query?.limit || 5)
+    const queryParams = req.query?.query || ''
+    const query = {}
+    if (queryParams) {
+        const field = queryParams.split(',')[0]
+        const value = queryParams.split(',')[1]
+
+        if (!isNaN(parseInt(value))) value = parseInt(value)
+
+        query[field] = value
+    }
+
+    const result = await ProductModel.paginate(query, {
         page: 1,
         limit: 10,
         lean: true
@@ -25,7 +39,7 @@ router.get('/products', async (req, res) => {
 })
 router.get('/products-realtime', async (req, res) => {
     const products = await productManager.list()
-    res.render('products_realtime', { products, title:'products real time' })
+    res.render('products_realtime', { products, title: 'products real time' })
 })
 
 router.get('/form-products', async (req, res) => {
