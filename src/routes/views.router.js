@@ -24,14 +24,48 @@ router.get('/list', async (req, res) => {
 
         query[field] = value
     }
+
     const sortField = req.query?.sort?.split(':')[0];
     const sortOrder = req.query?.sort?.split(':')[1];
+
     const result = await ProductModel.paginate(query, {
         page,
         limit,
         lean: true,
         sort: { [sortField]: sortOrder === 'desc' ? -1 : 1 }
     })
+
+    // calcular el totla de cosas en la coleccion
+    const totalDocs = await ProductModel.countDocuments(query);
+
+    // calcular el total de paginas
+    const totalPages = Math.ceil(totalDocs / limit);
+
+    // calcular pagina anterior y siguiente
+    const prevPage = page > 1 ? page - 1 : null;
+    const nextPage = page < totalPages ? page + 1 : null;
+
+    // ver si existen
+    const hasPrevPage = prevPage !== null;
+    const hasNextPage = nextPage !== null;
+
+    const response = {
+        status: 'success',
+        payload: result.docs,
+        totalPages,
+        prevPage,
+        nextPage,
+        page,
+        hasPrevPage,
+        hasNextPage,
+        prevLink: hasPrevPage ? `/list?limit=${limit}&page=${prevPage}` : null,
+        nextLink: hasNextPage ? `/list?limit=${limit}&page=${nextPage}` : null,
+    };
+
+    // console.log para ver todo
+    console.log(response);
+
+    // renderizar 
     res.render('productsList', result)
 })
 

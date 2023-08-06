@@ -50,6 +50,16 @@
   </tbody>
 </table>
 
+{{!-- Show Previous Link if it exists --}}
+{{#if hasPrevPage}}
+<a href="{{prevLink}}">Previous</a>
+{{/if}}
+
+{{!-- Show Next Link if it exists --}}
+{{#if hasNextPage}}
+<a href="{{nextLink}}">Next</a>
+{{/if}}
+
 <script>
   document.getElementById('form').onsubmit = (e) => {
     e.preventDefault()
