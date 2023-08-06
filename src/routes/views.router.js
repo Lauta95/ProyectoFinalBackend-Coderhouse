@@ -18,7 +18,7 @@ router.get('/list', async (req, res) => {
     const query = {}
     if (queryParams) {
         const field = queryParams.split(',')[0]
-        const value = queryParams.split(',')[1]
+        let value = queryParams.split(',')[1]
 
         if (!isNaN(parseInt(value))) value = parseInt(value)
 
@@ -26,8 +26,8 @@ router.get('/list', async (req, res) => {
     }
 
     const result = await ProductModel.paginate(query, {
-        page: 1,
-        limit: 10,
+        page,
+        limit,
         lean: true
     })
     res.render('productsList', result)
