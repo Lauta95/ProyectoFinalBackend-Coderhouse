@@ -11,7 +11,12 @@
     <br>
     Limit: <input type="text" id="query-limit" value="{{limit}}"> <br>
     Page: <input type="number" id="query-page" value="{{page}}"> <br>
-    Sort: <input type="number" id="query-page" value="{{sort}}"> <br>
+    Sort by:
+    <select id="sort-field">
+      <option value="">None</option>
+      <option value="price:asc">Price Asc</option>
+      <option value="price:desc">Price Desc</option>
+    </select>
     <br>
     <button type="submit">Filtrar</button>
     <br>
@@ -49,9 +54,13 @@
   document.getElementById('form').onsubmit = (e) => {
     e.preventDefault()
     const limit = document.getElementById('query-limit').value;
-    const page = document.getElementById('query-page').value
+    const page = document.getElementById('query-page').value;
+    const sortField = document.getElementById('sort-field').value;
 
-    const url = `/list?limit=${limit}&page=${page}`
+    let url = `/list?limit=${limit}&page=${page}`
+    if (sortField) {
+      url += `&sort=${sortField}`;
+    }
     window.location.href = url
   }
 </script>

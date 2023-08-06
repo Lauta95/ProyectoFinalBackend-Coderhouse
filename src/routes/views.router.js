@@ -24,11 +24,13 @@ router.get('/list', async (req, res) => {
 
         query[field] = value
     }
-
+    const sortField = req.query?.sort?.split(':')[0];
+    const sortOrder = req.query?.sort?.split(':')[1];
     const result = await ProductModel.paginate(query, {
         page,
         limit,
-        lean: true
+        lean: true,
+        sort: { [sortField]: sortOrder === 'desc' ? -1 : 1 }
     })
     res.render('productsList', result)
 })
