@@ -69,10 +69,61 @@ router.get('/list', async (req, res) => {
     res.render('productsList', result)
 })
 
+// vista del /products para visualizar todos los productos con su respectiva paginación
 router.get('/products', async (req, res) => {
-    const products = await productManager.list()
-    res.render('products', { products })
-})
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const queryParams = req.query.query || '';
+    const query = {};
+
+    if (queryParams) {
+        const field = queryParams.split(',')[0];
+        let value = queryParams.split(',')[1];
+
+        if (!isNaN(parseInt(value))) value = parseInt(value);
+
+        query[field] = value;
+    }
+
+    const sortField = req.query.sort?.split(':')[0];
+    const sortOrder = req.query.sort?.split(':')[1];
+
+    // traer los productos con paginacion y el filtro
+    const result = await ProductModel.paginate(query, {
+        page,
+        limit,
+        lean: true,
+        sort: { [sortField]: sortOrder === 'desc' ? -1 : 1 }
+    });
+
+    // renderizar todo
+    res.render('products', {
+        products: result.docs,
+        totalPages: result.totalPages,
+        currentPage: result.page,
+        hasNextPage: result.hasNextPage,
+        hasPrevPage: result.hasPrevPage,
+        prevPage: result.prevPage,
+        nextPage: result.nextPage
+    });
+});
+
+router.get('/products/:id', async (req, res) => {
+    const productId = req.params.id;
+
+    try {
+        // traer el detalle del producto por su id en POSTMAN:
+        const product = await ProductModel.findById(productId);
+        // renderizarlo:
+        res.render('productDetails', product);
+
+    } catch (error) {
+        // mostrar error 500 en caso de no encontrarlo
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
 router.get('/products-realtime', async (req, res) => {
     const products = await productManager.list()
     res.render('products_realtime', { products, title: 'products real time' })

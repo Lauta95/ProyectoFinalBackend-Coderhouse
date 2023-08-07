@@ -3,28 +3,50 @@
 <a href="/form-products">Crear producto</a>
 <a href="/products-realtime">Productos realtime</a>
 <a href="/api/chat">Chat</a>
- <table>
-    <thead>
-      <tr>
-        <th>Code</th>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Price</th>
-        <th>Thumbnails</th>
-        <th>Stock</th>
-        <th>ID</th>
-      </tr>
-    </thead>
-    <tbody>
-        {{#each products}}
-            <tr>
-                <td>{{this.code}}</td>
-                <td>{{this.title}}</td>
-                <td>{{this.description}}</td>
-                <td>{{this.price}}</td>
-                <td>{{this.thumbnails}}</td>
-                <td>{{this.stock}}</td>
-                <td>{{this.id}}</td>
-            </tr>
-        {{/each}}
-    </tbody>
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Thumbnails</th>
+      <th>Stock</th>
+      <th>ID</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each products}}
+    <tr>
+      <td>{{this.code}}</td>
+      <td>{{this.title}}</td>
+      <td>{{this.description}}</td>
+      <td>{{this.price}}</td>
+      <td>{{this.thumbnails}}</td>
+      <td>{{this.stock}}</td>
+      <td>{{this.id}}</td>
+      <td>
+        {{!-- link para mostrar el detalle del producto completo --}}
+        <a href="/products/{{this._id}}">View Details</a>
+        <!-- formulario para agregar al carrito -->
+        <form action="/cart" method="post">
+          <input type="hidden" name="productId" value="{{this._id}}">
+          <input type="number" name="quantity" value="1" min="1">
+          <button type="submit">Add to Cart</button>
+        </form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<div>
+  {{#if hasPrevPage}}
+  <a href="/products?page={{prevPage}}">Previous</a>
+  {{/if}}
+
+  {{#if hasNextPage}}
+  <a href="/products?page={{nextPage}}">Next</a>
+  {{/if}}
+</div>

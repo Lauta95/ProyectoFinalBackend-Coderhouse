@@ -1,6 +1,7 @@
 import { Router } from 'express'
 // import CartManager from '../DAO/fileManager/cart.service.js'
 import CartModel from '../DAO/mongoManager/models/cart.model.js'
+import ProductModel from '../DAO/mongoManager/models/product.model.js'
 
 const router = Router()
 
@@ -8,11 +9,15 @@ router.get('/', async (req, res) => {
     const result = await CartModel.find()
     res.send(result)
 })
-router.get('/:cid/', async (req, res) => {
-    const cid = req.params.cid
-    const result = await CartModel.findById(cid)
-    res.send(result)
-})
+router.get('/:cid', async (req, res) => {
+    const cid = req.params.cid;
+  
+    // se agrega populate() para cargar los datos completos de los productos relacionados
+    const cart = await CartModel.findOne({ _id: cid }).populate('products')
+  
+    res.send(cart);
+    console.log(cart);
+  });
 router.post('/', async (req, res) => {
     const result = await CartModel.create({ products: [] })
     res.send(result)
@@ -42,7 +47,7 @@ router.put('/:cid', async (req, res) => {
     const cid = req.params.cid;
     const { products } = req.body;
 
-    const cart = await CartModel.findOne({ _id: cid });
+    const cart = await CartModel.findOne({ _id: cid })
     cart.products = products;
 
     const result = await cart.save();
