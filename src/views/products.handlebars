@@ -30,7 +30,7 @@
         {{!-- link para mostrar el detalle del producto completo --}}
         <a href="/products/{{this._id}}">View Details</a>
         <!-- formulario para agregar al carrito -->
-        <form action="/cart" method="post">
+        <form action="/api/carts/{{this._id}}/products/{{this.id}}" method="post">
           <input type="hidden" name="productId" value="{{this._id}}">
           <input type="number" name="quantity" value="1" min="1">
           <button type="submit">Add to Cart</button>

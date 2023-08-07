@@ -11,13 +11,13 @@ router.get('/', async (req, res) => {
 })
 router.get('/:cid', async (req, res) => {
     const cid = req.params.cid;
-  
+
     // se agrega populate() para cargar los datos completos de los productos relacionados
     const cart = await CartModel.findOne({ _id: cid }).populate('products')
-  
+
     res.send(cart);
     console.log(cart);
-  });
+});
 router.post('/', async (req, res) => {
     const result = await CartModel.create({ products: [] })
     res.send(result)
@@ -69,6 +69,28 @@ router.put('/:cid/products/:pid', async (req, res) => {
 
     const result = await cart.save();
     res.send(result);
+});
+// POST PARA AGREGAR AL CARRITO CON EL BOTÓN DIRECTAMENTE Y ENTRANDO AL DETALLE DEL PRODUCTO (PRODUCTDETAILS.HANDLEBARS)
+router.post('/:cid/products/:pid', async (req, res) => {
+    const cid = req.params.cid;
+    const pid = req.params.pid;
+    const quantity = req.body.quantity || 1;
+
+    try {
+        const cart = await CartModel.findOne({ _id: cid });
+
+        const existingProduct = cart.products.find((product) => product.id === pid);
+        if (existingProduct) {
+            existingProduct.quantity += parseInt(quantity, 10);
+        } else {
+            cart.products.push({ id: pid, quantity: parseInt(quantity, 10) });
+        }
+
+        const result = await cart.save();
+        res.status(200).json({ status: 'success', message: 'Product added to cart successfully' });
+    } catch (error) {
+        res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+    }
 });
 
 // para borrar del carrito el producto seleccionado
