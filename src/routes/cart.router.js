@@ -70,7 +70,10 @@ router.post('/:cid/products/:pid', async (req, res) => {
         }
 
         const result = await cart.save();
-        res.status(200).json({ status: 'success', message: 'Product added to cart successfully' });
+
+        // para ir al carrito una vez agregado:
+        const updatedCart = await CartModel.findOne({ _id: cid }).populate('products.productId');
+        res.render('cartDetails', { cart: updatedCart });
     } catch (error) {
         res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
