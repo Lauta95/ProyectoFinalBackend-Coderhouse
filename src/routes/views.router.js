@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import ProductManager from '../DAO/fileManager/product.service.js';
 import ProductModel from '../DAO/mongoManager/models/product.model.js'
+import CartModel from '../DAO/mongoManager/models/cart.model.js';
 
 const router = Router()
 const productManager = new ProductManager()
@@ -95,9 +96,11 @@ router.get('/products', async (req, res) => {
         lean: true,
         sort: { [sortField]: sortOrder === 'desc' ? -1 : 1 }
     });
-
+    const carts = await CartModel.find()
+    const cartId = carts ? carts[0]._id : null
     // renderizar todo
     res.render('products', {
+        cartId,
         products: result.docs,
         totalPages: result.totalPages,
         currentPage: result.page,

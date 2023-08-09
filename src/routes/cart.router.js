@@ -6,14 +6,14 @@ import ProductModel from '../DAO/mongoManager/models/product.model.js'
 const router = Router()
 
 router.get('/', async (req, res) => {
-    const result = await CartModel.find()
+    const result = await CartModel.find().populate('products.productId')
     res.send(result)
 })
 router.get('/:cid', async (req, res) => {
     const cid = req.params.cid;
 
     // se agrega populate() para cargar los datos completos de los productos relacionados
-    const cart = await CartModel.findOne({ _id: cid }).populate('products')
+    const cart = await CartModel.findOne({ _id: cid }).populate('products.productId')
 
     res.send(cart);
     console.log(cart);
@@ -22,23 +22,6 @@ router.post('/', async (req, res) => {
     const result = await CartModel.create({ products: [] })
     res.send(result)
 })
-router.post('/:cid/product/:pid', async (req, res) => {
-    const cid = req.params.cid;
-    const pid = req.params.pid;
-    const quantity = req.query.quantity || 1
-
-    const cart = await CartModel.findOne({ _id: cid })
-
-    const existingProduct = cart.products.find(product => product.id === pid)
-    if (existingProduct) {
-        existingProduct.quantity += parseInt(quantity, 10)
-    } else {
-        cart.products.push({ id: pid, quantity })
-    }
-
-    const result = await cart.save()
-    res.send(result);
-});
 
 // Nuevos endpoints de la segunda preentrega:
 
@@ -79,11 +62,11 @@ router.post('/:cid/products/:pid', async (req, res) => {
     try {
         const cart = await CartModel.findOne({ _id: cid });
 
-        const existingProduct = cart.products.find((product) => product.id === pid);
+        const existingProduct = cart.products.find((product) => product.productId === pid);
         if (existingProduct) {
             existingProduct.quantity += parseInt(quantity, 10);
         } else {
-            cart.products.push({ id: pid, quantity: parseInt(quantity, 10) });
+            cart.products.push({ productId: pid, quantity: parseInt(quantity, 10) });
         }
 
         const result = await cart.save();
