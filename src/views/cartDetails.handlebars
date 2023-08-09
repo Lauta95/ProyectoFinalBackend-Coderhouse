@@ -1,0 +1,24 @@
+<h2 class="titulo">Cart Details</h2>
+<a href="/">Back to Home</a>
+
+<div class="cart-details">
+    <h3>Products in Cart</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each cart.products}}
+            <tr>
+                <td>{{this.productId.title}}</td>
+                <td>{{this.productId.price}}</td>
+                <td>{{this.quantity}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

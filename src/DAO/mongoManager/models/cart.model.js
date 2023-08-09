@@ -9,7 +9,6 @@ const cartModel = mongoose.model('carts', new mongoose.Schema({
             },
             quantity: Number,
         }],
-        default:[]
     }
 }))
 

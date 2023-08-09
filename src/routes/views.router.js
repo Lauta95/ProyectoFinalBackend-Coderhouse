@@ -125,7 +125,21 @@ router.get('/products/:id', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
+// visualizar un carrito en específico, donde se van a listar solo los productos que pertenezcan a dicho carrito
+router.get('/carts/:cid', async (req, res) => {
+    const cid = req.params.cid;
+  
+    try {
+        // Obtener el carrito por su ID y cargar los datos completos de los productos relacionados
+        const cart = await CartModel.findOne({ _id: cid }).populate('products.productId');
+  
+        // Renderizar la vista del carrito específico y pasar los datos del carrito
+        res.render('cartDetails', { cart });
+    } catch (error) {
+        // Mostrar error 500 en caso de no encontrar el carrito
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 router.get('/products-realtime', async (req, res) => {
     const products = await productManager.list()

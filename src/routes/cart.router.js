@@ -6,7 +6,7 @@ import ProductModel from '../DAO/mongoManager/models/product.model.js'
 const router = Router()
 
 router.get('/', async (req, res) => {
-    const result = await CartModel.find().populate('products.productId')
+    const result = await CartModel.find()
     res.send(result)
 })
 router.get('/:cid', async (req, res) => {
