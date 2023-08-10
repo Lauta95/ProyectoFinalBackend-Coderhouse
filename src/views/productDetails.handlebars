@@ -7,6 +7,43 @@
   <p>Price: {{this.price}}</p>
   <p>Category: {{this.category}}</p>
   <p>Stock: {{this.stock}}</p>
-  <input type="number" name="quantity" value="1" min="1">
-  <button type="submit">Agregar al carrito</button>
+  <form id="add-to-cart-form" data-cart-id="{{@root.cartId}}">
+    <input type="number" name="quantity" value="1" min="1">
+    <button type="submit" data-product-id="{{this._id}}" class="add-to-cart">Agregar al carrito</button>
+  </form>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const addToCartForm = document.getElementById("add-to-cart-form");
+
+  addToCartForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const form = event.target;
+    const productId = form.querySelector(".add-to-cart").getAttribute("data-product-id");
+    const quantity = form.querySelector("input[name='quantity']").value;
+    
+    const cartId = form.getAttribute("data-cart-id"); // Retrieve the cartId from the data attribute
+
+    try {
+      const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ quantity }),
+      });
+
+      if (response.ok) {
+        console.log("Product added to cart successfully");
+        // You can redirect to the cart or perform other actions after successful addition
+      } else {
+        console.error("Failed to add the product to cart");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  });
+});
+</script>
