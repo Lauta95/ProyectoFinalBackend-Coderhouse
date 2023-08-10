@@ -86,7 +86,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
 
     const cart = await CartModel.findOne({ _id: cid });
 
-    cart.products = cart.products.filter((product) => product.id !== pid);
+    cart.products = cart.products.filter((product) => product.productId.toString() === pid);
 
     const result = await cart.save();
     res.send(result);
