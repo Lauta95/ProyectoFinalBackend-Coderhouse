@@ -9,7 +9,19 @@ app.use(session({
     saveUninitialized: true //guardar algo aunque este vacío
 }))
 
-app.get('/', (req, res) => res.send('ok'))
+app.get('/', (req, res) => {
+    const name = req.session.name || req.query.name
+    console.log(req.session);
+    if(req.session.counter){
+        req.session.counter++
+        return res.send(`visitaste la Página ${name} ${req.session.counter}`)
+    }
+    req.session.name = name
+
+    req.session.counter = 1
+
+    res.send(`te damos la Bienvenida ${name} ${req.session.counter}`)
+})
 
 app.get('/session', (req, res) => {
     console.log(req.session);
