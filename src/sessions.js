@@ -20,6 +20,7 @@ app.get('/', (req, res) => {
 
     req.session.counter = 1
 
+    
     res.send(`te damos la Bienvenida ${name} ${req.session.counter}`)
 })
 
