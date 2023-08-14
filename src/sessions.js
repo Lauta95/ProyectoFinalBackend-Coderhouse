@@ -1,15 +1,19 @@
 import express from 'express'
 import session from 'express-session'
-import FileStore from 'session-file-store'
+import MongoStore from 'connect-mongo'
 
 const app = express()
-const fileStore = FileStore(session)
+const URL = "mongodb+srv://freecodecamp-user:fDlfjlzTXxxBhYva@cluster0.vw59urg.mongodb.net/?retryWrites=true&w=majority"
 
 app.use(session({
-    store: new fileStore({
-        path: './sessions',
-        ttl: 100,
-        rettries: 2
+    store: MongoStore.create({
+        mongoUrl: URL,
+        dbName: 'sessions',
+        mongoOptions: {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        },
+        ttl: 100
     }),
     secret: 'secret',
     resave: true,//para mantener la session activa
@@ -28,12 +32,12 @@ app.get('/login', (req, res) => {
     return res.send('login success')
 })
 
-function auth(req, res, next){
+function auth(req, res, next) {
     return req.session?.user ? next() : res.status(401).send('auth error')
 }
 app.get('/private', auth, (req, res) => { res.send(`private page ${req.session.user}`) })
 
-app.listen(8080)
+app.listen(8080, ()=> console.log('listening..'))
 
 
 
