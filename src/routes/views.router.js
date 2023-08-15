@@ -14,11 +14,6 @@ router.get('/', (req, res) => {
     res.render('login', {})
 })
 
-router.get('/login', (req, res) => {
-    console.log('logueado');
-    res.render('login', {})
-})
-
 router.get('/register', (req, res) => {
     res.render('register', {})
 })
