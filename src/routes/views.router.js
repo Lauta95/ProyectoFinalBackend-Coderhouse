@@ -6,11 +6,32 @@ import CartModel from '../DAO/mongoManager/models/cart.model.js';
 
 const router = Router()
 const productManager = new ProductManager()
-
+// login
 router.get('/', (req, res) => {
-    res.render('index', {})
+    if (req.session?.user) {
+        res.redirect('/profile')
+    }
+    res.render('login', {})
 })
 
+router.get('/login', (req, res) => {
+    console.log('logueado');
+    res.render('login', {})
+})
+
+router.get('/register', (req, res) => {
+    res.render('register', {})
+})
+// middleware para el profile: si existe la sesion, te manda al /profile con el middleware next()... si no te manda de nuevo al login
+function auth(req, res, next) {
+    if (req.session?.user) return next()
+    res.redirect('/')
+}
+router.get('/profile', auth, (req, res) => {
+    const user = req.session.user
+    res.render('profile', user)
+})
+// -------------------------------------------
 router.get('/list', async (req, res) => {
 
     const page = parseInt(req.query?.page || 1)
@@ -128,11 +149,11 @@ router.get('/products/:id', async (req, res) => {
 // visualizar un carrito en específico, donde se van a listar solo los productos que pertenezcan a dicho carrito
 router.get('/carts/:cid', async (req, res) => {
     const cid = req.params.cid;
-  
+
     try {
         // Obtener el carrito por su ID y cargar los datos completos de los productos relacionados
         const cart = await CartModel.findOne({ _id: cid }).populate('products.productId');
-  
+
         // Renderizar la vista del carrito específico y pasar los datos del carrito
         res.render('cartDetails', { cart });
     } catch (error) {

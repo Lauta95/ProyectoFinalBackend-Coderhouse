@@ -8,11 +8,18 @@ import ChatModel from './DAO/mongoManager/models/message.model.js'
 import viewsRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
 import ProductManager from './DAO/fileManager/product.service.js'
+import sessionRouter from './routes/session.router.js'
 import __dirname from './utils.js'
+import MongoStore from 'connect-mongo'
+import session from 'express-session'
+
 const app = express()
+const URL = "mongodb+srv://freecodecamp-user:fDlfjlzTXxxBhYva@cluster0.vw59urg.mongodb.net/?retryWrites=true&w=majority"
+const dbName = 'sessions_backend'
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
+// handlebars
 app.engine('handlebars', handlebars.engine({
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
@@ -24,12 +31,26 @@ app.set('view engine', 'handlebars')
 
 app.use('/static', express.static(__dirname + '/public'))
 
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: URL,
+        dbName,
+        mongoOptions: {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        },
+        ttl: 100
+    }),
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}))
+
 app.use('/', viewsRouter)
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/api/chat', chatRouter)
-
-const URL = "mongodb+srv://freecodecamp-user:fDlfjlzTXxxBhYva@cluster0.vw59urg.mongodb.net/?retryWrites=true&w=majority"
+app.use('/api/session', sessionRouter)
 
 const runServer = () => {
     const httpServer = app.listen(8080, () => console.log('listening...'))
