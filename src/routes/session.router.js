@@ -13,7 +13,7 @@ router.post('/login', async (req, res) => {
 
     }
     req.session.user = user
-    return res.redirect('/profile')
+    return res.redirect('/products')
 })
 
 router.post('/register', async (req, res) => {

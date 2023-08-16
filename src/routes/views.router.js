@@ -105,6 +105,9 @@ router.get('/products', async (req, res) => {
     const sortField = req.query.sort?.split(':')[0];
     const sortOrder = req.query.sort?.split(':')[1];
 
+    // req session del user para poder mostrar los datos del login en la ruta /products como por ejemplo en un mensaje de bienvenida
+    const user = req.session.user;
+
     // traer los productos con paginacion y el filtro
     const result = await ProductModel.paginate(query, {
         page,
@@ -115,8 +118,11 @@ router.get('/products', async (req, res) => {
     const carts = await CartModel.find()
     const cartId = carts ? carts[0]._id : null
     // renderizar todo
+    console.log(user)
     res.render('products', {
         cartId,
+        // user para renderizar:
+        user,
         products: result.docs,
         totalPages: result.totalPages,
         currentPage: result.page,

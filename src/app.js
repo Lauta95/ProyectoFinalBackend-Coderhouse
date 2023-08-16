@@ -39,7 +39,7 @@ app.use(session({
             useNewUrlParser: true,
             useUnifiedTopology: true
         },
-        ttl: 100
+        ttl: 1000
     }),
     secret: 'secret',
     resave: true,
