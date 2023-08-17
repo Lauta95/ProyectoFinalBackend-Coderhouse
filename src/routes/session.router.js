@@ -10,8 +10,13 @@ router.post('/login', async (req, res) => {
     if (!user) {
         console.log('hi');
         return res.render('login', { error: 'Invalid credentials' });
-
     }
+    if (user.email === 'adminCoder@gmail.com') {
+        user.role = 'admin';
+    } else {
+        user.role = 'user';
+    }
+
     req.session.user = user
     return res.redirect('/products')
 })

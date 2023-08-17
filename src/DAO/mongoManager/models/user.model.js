@@ -5,7 +5,12 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
     last_name: String,
     email: String,
     age: Number,
-    password: String
+    password: String,
+    role: {
+        type: String,
+        enum: ['usuario', 'admin'], // Definir los posibles roles
+        default: 'usuario', // Establecer un valor predeterminado
+    }
 }))
 
 export default UserModel
