@@ -9,10 +9,18 @@ const productManager = new ProductManager()
 // login
 router.get('/', (req, res) => {
     if (req.session?.user) {
-        res.redirect('/profile')
+        res.redirect('/products')
     }
     res.render('login', {})
 })
+
+router.post('/logout', (req, res) => {
+    console.log('OK');
+    
+    req.session.destroy(() => {
+        res.redirect('/')
+      })
+});
 
 router.get('/register', (req, res) => {
     res.render('register', {})
@@ -26,6 +34,7 @@ router.get('/profile', auth, (req, res) => {
     const user = req.session.user
     res.render('profile', user)
 })
+
 // -------------------------------------------
 router.get('/list', async (req, res) => {
 
