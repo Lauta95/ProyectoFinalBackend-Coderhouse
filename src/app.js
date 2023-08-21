@@ -30,7 +30,8 @@ app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
 app.use('/static', express.static(__dirname + '/public'))
-
+// ->express session(middleware de sesión en una aplicación express, para administrar y mantener la información de sesión de los usuarios) 
+// ->mongoStore(administrar y almacenar las sesiones en una base de datos mongoDB)
 app.use(session({
     store: MongoStore.create({
         mongoUrl: URL,
