@@ -9,9 +9,11 @@ import viewsRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
 import ProductManager from './DAO/fileManager/product.service.js'
 import sessionRouter from './routes/session.router.js'
-import __dirname from './utils.js'
 import MongoStore from 'connect-mongo'
 import session from 'express-session'
+import passport from 'passport'
+import __dirname from './utils.js'
+import initializePassport from './config/passport.config.js'
 
 const app = express()
 const URL = "mongodb+srv://freecodecamp-user:fDlfjlzTXxxBhYva@cluster0.vw59urg.mongodb.net/?retryWrites=true&w=majority"
@@ -28,6 +30,8 @@ app.engine('handlebars', handlebars.engine({
 }))
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
+
+
 
 app.use('/static', express.static(__dirname + '/public'))
 // ->express session(middleware de sesión en una aplicación express, para administrar y mantener la información de sesión de los usuarios) 
@@ -46,6 +50,11 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+
+// passport
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use('/', viewsRouter)
 app.use('/api/products', productRouter)
