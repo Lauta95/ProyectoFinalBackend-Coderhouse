@@ -33,4 +33,21 @@ router.get('/profile', auth, (req, res) => {
     res.render('profile', user)
 })
 
+router.get(
+    '/login-github',
+    passport.authenticate('github', { scope: ['user:email'] }),
+    async(req,res) => {}
+)
+
+router.get(
+    '/githubcallback',
+    passport.authenticate('github', {failureRedirect:'/'}),
+    async(req,res) => {
+        console.log('callback: ', req.user)
+        req.session.user = req.user
+        console.log(req.session);
+        res.redirect('profile')
+    }
+)
+
 export default router

@@ -2,11 +2,62 @@ import passport from 'passport'; //para manejar los diferentes medios para inici
 import local from 'passport-local'; //para iniciar sesion de manera local
 import UserModel from '../DAO/mongoManager/models/user.model.js';
 import { createHash, isValidPassword } from '../utils.js';
+import passportGoogle from 'passport-google-oauth20'
+import GitHubStrategy from 'passport-github2'
+
+// App ID: 375160
+// Client ID: Iv1.270c5a68790735e4
+// secret: 9d675ea5525ade24d354e66a9866417d85fb9991
 
 const LocalStrategy = local.Strategy
+// const GoogleStrategy = passportGoogle.Strategy;
+
+// const GOOGLE_CLIENT_ID = ''
+// const GOOGLE_CLIENT_SECRET = ''
 
 const initializePassport = () => {
     // los LocalStrategy funcionan como un middleware
+
+    // passport.use(new GoogleStrategy({
+    //     clientID: GOOGLE_CLIENT_ID,
+    //     clientSecret: GOOGLE_CLIENT_SECRET,
+    //     callbackURL: "http://127.0.0.1:8080/callback-google"
+    //   },
+    //   async function(accessToken, refreshToken, profile, done) => {
+    //     const email = profile.emails[0].value
+    //     UserModel.findOrCreate({ email }, (err, user) => {
+    //       return done(err, user);
+    //     });
+    //   }
+    // ))
+
+    passport.use('github', new GitHubStrategy(
+        {
+            clientID: 'Iv1.270c5a68790735e4',
+            clientSecret: '9d675ea5525ade24d354e66a9866417d85fb9991',
+            callbackURL:'http://127.0.0.1:8080/githubcallback'
+        },
+        async (accessToken, refreshToken, profile, done) => {
+            console.log(profile);
+            try{
+                const user = await UserModel.findOne({email: profile._json.email})
+                if(user) {
+                    console.log('user already exists ' + email);
+                    return done(null, user)
+                }
+                const newUser = {
+                    name: profile._json.name,
+                    email: profile._json.email,
+                    password: ''
+                }
+                const result = await UserModel.create(newUser)
+                return done(null, result)
+            } catch(e) {
+                return done('error to login with github' + e)
+            }
+        }
+    ))
+
     passport.use('register', new LocalStrategy(
         {
             passReqToCallback: true, // que se pueda acceder al objeto request como cualquier otro middleware
@@ -42,7 +93,6 @@ const initializePassport = () => {
             try {
                 const user = await UserModel.findOne({ email: username }).lean().exec()
                 console.log(user);
-                console.log(user._id);
                 if (!user) {
 
                     console.error('user doesnt exists');
@@ -63,7 +113,7 @@ const initializePassport = () => {
         done(null, user._id)
     })
 
-    passport.deserializeUser(async (id, done) =>{
+    passport.deserializeUser(async (id, done) => {
         const user = await UserModel.findById(id)
         done(null, user)
     })
