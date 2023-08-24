@@ -14,7 +14,7 @@ const initializePassport = () => {
         },
         // logica para iniciar sesion desde local, tiene cuatro parámetros: request username password done
         async (req, username, password, done) => {
-            const { name, email } = req.body
+            const { first_name, last_name, age, email } = req.body
             try {
                 const user = await UserModel.findOne({ email: username })
                 if (user) {
@@ -22,7 +22,9 @@ const initializePassport = () => {
                     return done(null, false)
                 }
                 const newUser = {
-                    name,
+                    first_name,
+                    last_name,
+                    age,
                     email,
                     password: createHash(password)
                 }
@@ -39,7 +41,10 @@ const initializePassport = () => {
         async (username, password, done) => {
             try {
                 const user = await UserModel.findOne({ email: username }).lean().exec()
+                console.log(user);
+                console.log(user._id);
                 if (!user) {
+
                     console.error('user doesnt exists');
                     return done(null, false)
                 }
@@ -47,12 +52,14 @@ const initializePassport = () => {
                     console.error('password not valid');
                     return done(null, false)
                 }
+                return done(null, user)
             } catch (e) {
-                return done('error login ' + error)
+                return done('error login ' + e)
             }
         }
     ))
     passport.serializeUser((user, done) => {
+        console.log('serializeUser: ', user);
         done(null, user._id)
     })
 

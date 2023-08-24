@@ -8,8 +8,9 @@ const router = Router()
 router.get('/login', (req, res) => { res.render('login', {}) })
 router.get('/register', (req, res) => { res.render('register', {}) })
 
-router.post('/login', passport.authenticate('login', '/'), async (req, res) => {
+router.post('/login', passport.authenticate('login', '/login'), async (req, res) => {
     if (!req.user) return res.status(400).send('invalid credentials')
+
     req.session.user = req.user
     return res.redirect('/profile')
 })
