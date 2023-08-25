@@ -15,7 +15,6 @@ const LocalStrategy = local.Strategy
 // const GOOGLE_CLIENT_ID = ''
 // const GOOGLE_CLIENT_SECRET = ''
 
-const initializePassport = () => {
     // los LocalStrategy funcionan como un middleware
 
     // passport.use(new GoogleStrategy({
@@ -30,6 +29,8 @@ const initializePassport = () => {
     //     });
     //   }
     // ))
+const initializePassport = () => {
+
 
     passport.use('github', new GitHubStrategy(
         {

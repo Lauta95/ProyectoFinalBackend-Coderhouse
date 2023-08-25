@@ -4,7 +4,9 @@ import { createHash, isValidPassword } from "../utils.js";
 import passport from "passport";
 
 const router = Router()
-
+router.get('/', (req, res) => { 
+    res.render('login', {}) 
+})
 router.get('/login', (req, res) => { res.render('login', {}) })
 router.get('/register', (req, res) => { res.render('register', {}) })
 
@@ -36,13 +38,13 @@ router.get('/profile', auth, (req, res) => {
 router.get(
     '/login-github',
     passport.authenticate('github', { scope: ['user:email'] }),
-    async(req,res) => {}
+    async (req, res) => { }
 )
 
 router.get(
     '/githubcallback',
-    passport.authenticate('github', {failureRedirect:'/'}),
-    async(req,res) => {
+    passport.authenticate('github', { failureRedirect: '/' }),
+    async (req, res) => {
         console.log('callback: ', req.user)
         req.session.user = req.user
         console.log(req.session);
