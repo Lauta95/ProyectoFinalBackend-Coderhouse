@@ -36,14 +36,13 @@ const initializePassport = () => {
         {
             clientID: 'Iv1.270c5a68790735e4',
             clientSecret: '9d675ea5525ade24d354e66a9866417d85fb9991',
-            callbackURL:'http://127.0.0.1:8080/githubcallback'
+            callbackURL:'http://127.0.0.1:8080/api/session/githubcallback'
         },
         async (accessToken, refreshToken, profile, done) => {
-            console.log(profile);
             try{
                 const user = await UserModel.findOne({email: profile._json.email})
                 if(user) {
-                    console.log('user already exists ' + email);
+                    console.log('user already exists ' + profile._json.email);
                     return done(null, user)
                 }
                 const newUser = {

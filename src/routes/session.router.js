@@ -4,8 +4,8 @@ import { createHash, isValidPassword } from "../utils.js";
 import passport from "passport";
 
 const router = Router()
-router.get('/', (req, res) => { 
-    res.render('login', {}) 
+router.get('/api/session/login-github', (req, res) => { 
+    res.render('home', {}) 
 })
 router.get('/login', (req, res) => { res.render('login', {}) })
 router.get('/register', (req, res) => { res.render('register', {}) })
