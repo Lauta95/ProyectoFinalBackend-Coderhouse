@@ -12,15 +12,16 @@
 </head>
 
 <body>
-    <a href="/">login</a> <br>
-    <a href="/api/session/login-github">login github</a> <br>
-    <a href="/auth/google">login google</a> <br>
-    <a href="/register">register</a> <br>
-    <a href="/profile">profile</a> <br>
+    <h2>Login</h2>
+    <a href="/">[Login]</a> 
+    <a href="/register">[Register]</a>
+    <a href="/api/session/login-github">[Login Github]</a>
+    <a href="/auth/google">[Login Google]</a>
+    <a href="/profile">[Profile]</a>
     <form action="/logout" method="post">
         <button type="submit">Logout</button>
     </form>
-
+    <hr>
     {{{ body }}}
 </body>
 
