@@ -3,6 +3,7 @@ import { Router } from 'express';
 import ProductManager from '../DAO/fileManager/product.service.js';
 import ProductModel from '../DAO/mongoManager/models/product.model.js'
 import CartModel from '../DAO/mongoManager/models/cart.model.js';
+import passport from 'passport'
 
 const router = Router()
 const productManager = new ProductManager()
@@ -16,10 +17,10 @@ router.get('/', (req, res) => {
 
 router.post('/logout', (req, res) => {
     console.log('OK');
-    
+
     req.session.destroy(() => {
         res.redirect('/')
-      })
+    })
 });
 
 router.get('/register', (req, res) => {
@@ -34,6 +35,30 @@ router.get('/profile', auth, (req, res) => {
     const user = req.session.user
     res.render('profile', user)
 })
+
+router.get(
+    '/auth/google',
+    passport.authenticate(
+        'google',
+        {
+            scope: [
+                'profile',
+                'email'
+            ]
+        }
+    ),
+    (req, res) => { }
+)
+
+router.get(
+    '/callback-google',
+    passport.authenticate('google', { failureRedirect: '/' }),
+    (req, res) => {
+        console.log('CONECTADO CON GOOGLE!', req.user);
+        req.session.user = req.user
+        console.log(req.session);
+        res.redirect('profile')
+    })
 
 // -------------------------------------------
 router.get('/list', async (req, res) => {

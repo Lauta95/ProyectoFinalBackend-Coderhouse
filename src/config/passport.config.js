@@ -24,15 +24,23 @@ const initializePassport = () => {
     passport.use(new GoogleStrategy({
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://127.0.0.1:8080/api/session/callback-google"
-      },
-      async (accessToken, refreshToken, profile, done) => {
-        const email = profile.emails[0].value
-        UserModel.findOrCreate({ email }, (err, user) => {
-          return done(err, user);
-        });
-      }
-    ))
+        callbackURL: "http://127.0.0.1:8080/callback-google"
+    },
+        async (accessToken, refreshToken, profile, done) => {
+            console.log(profile);
+            const email = profile.emails[0].value
+
+            const user = await UserModel.findOne({ email })
+            if (user) {
+                console.log('already exists');
+                return done(null, user)
+            }
+
+            const result = await UserModel.create({ email, name: '', password: '' });
+
+            return done(null, result)
+        }
+    ));
 
     passport.use('github', new GitHubStrategy(
         {
