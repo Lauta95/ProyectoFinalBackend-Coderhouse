@@ -1,9 +1,11 @@
 import passport from 'passport'; //para manejar los diferentes medios para iniciar sesión
 import local from 'passport-local'; //para iniciar sesion de manera local
 import UserModel from '../DAO/mongoManager/models/user.model.js';
-import { createHash, isValidPassword } from '../utils.js';
+import { createHash, extractCookie, isValidPassword } from '../utils.js';
 import passportGoogle from 'passport-google-oauth20'
 import GitHubStrategy from 'passport-github2'
+import passportJWT, { ExtractJwt } from 'passport-jwt'
+import { generateToken } from '../utils.js';
 
 // GH->
 // App ID: 375160
@@ -12,14 +14,30 @@ import GitHubStrategy from 'passport-github2'
 
 const LocalStrategy = local.Strategy
 const GoogleStrategy = passportGoogle.Strategy;
+const JWTstrategy = passportJWT.Strategy;
+const JWTextract = passportJWT.ExtractJwt;
 
 const GOOGLE_CLIENT_ID = '719876990121-rp7993d5rjb2c8p52oeaavpa2sungap3.apps.googleusercontent.com'
 const GOOGLE_CLIENT_SECRET = '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'
 
 const initializePassport = () => {
 
-
     // los LocalStrategy funcionan como un middleware
+
+    // para autorizar, extraer y validar el jwt:
+    passport.use('jwt', new JWTstrategy(
+        {
+            // Esto lo va a hacer la estrategia del jwt por dentro=>
+            // extraer:
+            jwtFromRequest: ExtractJwt.fromExtractors([extractCookie]),
+            // además va a desencriptar, por lo tanto hay que pasarle la key:
+            secretOrKey: 'secretForJWT'
+        },
+        (jwt_payload, done) => {
+            console.log({ jwt_payload });
+            done(null, jwt_payload)
+        }
+    ))
 
     passport.use(new GoogleStrategy({
         clientID: GOOGLE_CLIENT_ID,
@@ -92,7 +110,7 @@ const initializePassport = () => {
                 const result = await UserModel.create(newUser)
                 return done(null, result)
             } catch (e) {
-                return done('error to register ' + error)
+                return done('error to register ' + e)
             }
         }
     ))
@@ -118,6 +136,7 @@ const initializePassport = () => {
             }
         }
     ))
+
     passport.serializeUser((user, done) => {
         console.log('serializeUser: ', user);
         done(null, user._id)

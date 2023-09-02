@@ -46,9 +46,8 @@ router.get(
     passport.authenticate('github', { failureRedirect: '/' }),
     async (req, res) => {
         console.log('callback: ', req.user)
-        req.session.user = req.user
-        console.log(req.session);
-        res.redirect('profile')
+       
+        res.cookie('keyCookieForJWT', req.user.token).redirect('/')
     }
 )
 

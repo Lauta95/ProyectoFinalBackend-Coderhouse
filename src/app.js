@@ -14,12 +14,14 @@ import session from 'express-session'
 import passport from 'passport'
 import __dirname from './utils.js'
 import initializePassport from './config/passport.config.js'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 const URL = "mongodb+srv://freecodecamp-user:fDlfjlzTXxxBhYva@cluster0.vw59urg.mongodb.net/?retryWrites=true&w=majority"
 const dbName = 'sessions_backend'
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(cookieParser())
 
 // handlebars
 app.engine('handlebars', handlebars.engine({
@@ -30,8 +32,6 @@ app.engine('handlebars', handlebars.engine({
 }))
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
-
-
 
 app.use('/static', express.static(__dirname + '/public'))
 // ->express session(middleware de sesión en una aplicación express, para administrar y mantener la información de sesión de los usuarios) 
@@ -96,8 +96,6 @@ const runServer = () => {
     })
 
 }
-
-
 
 // mongoose.set('strictQuery', false)
 console.log('connecting');
