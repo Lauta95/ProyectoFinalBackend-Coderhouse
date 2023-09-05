@@ -1,11 +1,10 @@
 import passport from 'passport'; //para manejar los diferentes medios para iniciar sesión
 import local from 'passport-local'; //para iniciar sesion de manera local
 import UserModel from '../DAO/mongoManager/models/user.model.js';
-import { createHash, extractCookie, isValidPassword } from '../utils.js';
+import { createHash, extractCookie, isValidPassword, generateToken } from '../utils.js';
 import passportGoogle from 'passport-google-oauth20'
 import GitHubStrategy from 'passport-github2'
-import passportJWT, { ExtractJwt } from 'passport-jwt'
-import { generateToken } from '../utils.js';
+import passportJWT from 'passport-jwt'
 
 // GH->
 // App ID: 375160
@@ -29,13 +28,20 @@ const initializePassport = () => {
         {
             // Esto lo va a hacer la estrategia del jwt por dentro=>
             // extraer:
-            jwtFromRequest: ExtractJwt.fromExtractors([extractCookie]),
+            jwtFromRequest: JWTextract.fromExtractors([extractCookie]),
             // además va a desencriptar, por lo tanto hay que pasarle la key:
             secretOrKey: 'secretForJWT'
         },
         (jwt_payload, done) => {
-            console.log({ jwt_payload });
-            done(null, jwt_payload)
+            if (jwt_payload) {
+                console.log('jwt TOKEN PAYLOAD: ', { jwt_payload });
+                return done(null, jwt_payload);
+            } else {
+                console.error('jwt token not found');
+                return done(null, false);
+            }
+            // console.log({ jwt_payload });
+            // return done(null, jwt_payload)
         }
     ))
 
@@ -68,18 +74,29 @@ const initializePassport = () => {
         },
         async (accessToken, refreshToken, profile, done) => {
             try {
-                const user = await UserModel.findOne({ email: profile._json.email })
+                let user = await UserModel.findOne({ email: profile._json.email })
                 if (user) {
                     console.log('user already exists ' + profile._json.email);
+                    let token = generateToken(user)
+                    console.log('token: ', token);
+                    user.token = token
                     return done(null, user)
+                } else {
+                    const newUser = {
+                        name: profile._json.name,
+                        email: profile._json.email,
+                        password: '',
+                        social: 'github',
+                        role: 'usuario'
+                    }
+                    const result = await UserModel.create(newUser)
+                    console.log(result);
+                    let token = generateToken(result)
+                    console.log('token: ', token);
+                    result.token = token
+                    return done(null, result)
                 }
-                const newUser = {
-                    name: profile._json.name,
-                    email: profile._json.email,
-                    password: ''
-                }
-                const result = await UserModel.create(newUser)
-                return done(null, result)
+
             } catch (e) {
                 return done('error to login with github' + e)
             }
@@ -119,7 +136,7 @@ const initializePassport = () => {
         { usernameField: 'email' },
         async (username, password, done) => {
             try {
-                const user = await UserModel.findOne({ email: username }).lean().exec()
+                const user = await UserModel.findOne({ email: username })
                 console.log(user);
                 if (!user) {
 

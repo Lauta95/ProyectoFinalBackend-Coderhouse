@@ -15,7 +15,7 @@ export const isValidPassword = (user, password) => {
 }
 
 
-export const generateToken = user => {
+export const generateToken = (user) => {
     return jwt.sign({ user }, 'secretForJWT', { expiresIn: '24' })
 }
 

@@ -4,8 +4,8 @@ import { createHash, isValidPassword } from "../utils.js";
 import passport from "passport";
 
 const router = Router()
-router.get('/api/session/login-github', (req, res) => { 
-    res.render('home', {}) 
+router.get('/api/session/login-github', (req, res) => {
+    res.render('home', {})
 })
 router.get('/login', (req, res) => { res.render('login', {}) })
 router.get('/register', (req, res) => { res.render('register', {}) })
@@ -29,11 +29,13 @@ function auth(req, res, next) {
     else res.redirect('/')
 }
 
-router.get('/profile', auth, (req, res) => {
-    const user = req.session.user
-
-    res.render('profile', user)
-})
+router.get('/profile',
+    passport.authenticate('jwt', { session: false }),
+    (req, res) => {
+        console.log(req.user);
+        const { user } = req
+        res.render('profile', user.user)
+    })
 
 router.get(
     '/login-github',
@@ -44,10 +46,15 @@ router.get(
 router.get(
     '/githubcallback',
     passport.authenticate('github', { failureRedirect: '/' }),
-    async (req, res) => {
-        console.log('callback: ', req.user)
-       
-        res.cookie('keyCookieForJWT', req.user.token).redirect('/')
+    (req, res) => {
+        if(!req.user){
+            res.status(401).send('auth failed :c')
+        }
+        const token = req.user.token;
+        console.log('callback: ', token)
+        // setear el jwt como una cookie:
+        res.cookie('keyCookieForJWT', token).redirect('/')
+        console.log('JWT TOKEN: ', token);
     }
 )
 
