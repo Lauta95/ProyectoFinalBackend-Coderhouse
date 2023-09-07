@@ -47,7 +47,7 @@ router.get(
     '/githubcallback',
     passport.authenticate('github', { failureRedirect: '/' }),
     (req, res) => {
-        if(!req.user){
+        if (!req.user) {
             res.status(401).send('auth failed :c')
         }
         const token = req.user.token;
@@ -57,5 +57,12 @@ router.get(
         console.log('JWT TOKEN: ', token);
     }
 )
-
+// Ruta para obtener el usuario actual
+router.get('/current', (req, res) => {
+    if (req.isAuthenticated()) {
+        res.json({ user: req.user });
+    } else {
+        res.status(401).json({ message: 'No estás autenticado' });
+    }
+});
 export default router
