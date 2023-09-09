@@ -213,4 +213,8 @@ router.post('/form-products', async (req, res) => {
     res.redirect('/products')
 })
 
+router.get('/current', (req,res)=>{
+    res.render('current', {})
+})
+
 export default router

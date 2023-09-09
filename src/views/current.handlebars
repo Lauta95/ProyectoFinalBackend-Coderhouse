@@ -1,0 +1,13 @@
+<div id="result"></div>
+
+<script>
+    fetch('/jwt/current', {
+        headers: {
+            'Content-Type': 'application/json',
+            'auth': `${localStorage.getItem('auth')}`
+        }
+    }).then(r => r.json())
+        .then(data => {
+            document.getElementById('result').innerHTML = JSON.stringify(data)
+        })
+</script>
