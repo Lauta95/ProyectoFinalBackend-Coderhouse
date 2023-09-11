@@ -1,13 +1,26 @@
 <div id="result"></div>
 
 <script>
-    fetch('/jwt/current', {
+    const authHeader = localStorage.getItem('auth');
+    console.log('Auth Header:', authHeader);
+
+    fetch('/api/session/current', {
         headers: {
-            'Content-Type': 'application/json',
-            'auth': `${localStorage.getItem('auth')}`
+            'auth': authHeader
         }
-    }).then(r => r.json())
-        .then(data => {
-            document.getElementById('result').innerHTML = JSON.stringify(data)
+    })
+        .then(response => {
+            if (!response.ok) {
+                console.error('Network response was not ok:', response.status, response.statusText);
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
         })
+        .then(data => {
+            document.getElementById('result').innerHTML = JSON.stringify(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('result').innerHTML = 'Error: ' + error.message;
+        });
 </script>

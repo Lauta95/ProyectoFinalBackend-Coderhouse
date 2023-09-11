@@ -51,7 +51,6 @@ router.get(
             res.status(401).send('auth failed :c')
         }
         const token = req.user.token;
-        console.log('callback: ', token)
         // setear el jwt como una cookie:
         res.cookie('keyCookieForJWT', token).redirect('/')
         console.log('JWT TOKEN: ', token);
@@ -59,10 +58,34 @@ router.get(
 )
 // Ruta para obtener el usuario actual
 router.get('/current', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.json({ user: req.user });
-    } else {
-        res.status(401).json({ message: 'No estás autenticado' });
-    }
+    const token = req.headers['auth'];
+    
+    // debug para ver si se recibe el token
+    console.log('Received token:', token);
+
+    passport.authenticate('jwt', { session: false }, (err, user, info) => {
+        console.log(err);
+        console.log(user);
+        console.log(info);
+        if (err) {
+            console.error('Error during JWT authentication:', err);
+
+            // return response con detalles para debug
+            return res.status(500).json({ error: 'Internal Server Error', details: err });
+        }
+
+        // debug statement para checkear si el user object es recibido correctamente
+        console.log('Authenticated User:', user);
+
+        if (!user) {
+            console.error('User not authenticated.');
+
+            // return unauthorized
+            return res.status(401).json({ error: 'Unauthorized' });
+        }
+
+        // si esta todo bien se responde con el user en un objeto
+        res.json({ user });
+    })(req, res);
 });
 export default router
