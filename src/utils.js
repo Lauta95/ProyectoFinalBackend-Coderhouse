@@ -16,7 +16,7 @@ export const isValidPassword = (user, password) => {
 
 
 export const generateToken = (user) => {
-    return jwt.sign({ user }, 'secretForJWT', { expiresIn: '24' })
+    return jwt.sign({ user }, 'secretForJWT', { expiresIn: '7d' })
 }
 
 export const extractCookie = req => {

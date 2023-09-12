@@ -88,4 +88,5 @@ router.get('/current', (req, res) => {
         res.json({ user });
     })(req, res);
 });
+
 export default router
