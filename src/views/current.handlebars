@@ -1,7 +1,15 @@
 <div id="result"></div>
 
 <script>
-    const authHeader = localStorage.getItem('auth');
+    function getCookie(cookieName) {
+        let cookie = {};
+        document.cookie.split(';').forEach(function (el) {
+            let [key, value] = el.split('=');
+            cookie[key.trim()] = value;
+        })
+        return cookie[cookieName];
+    }
+    const authHeader = getCookie('auth')
     console.log('Auth Header:', authHeader);
 
     fetch('/api/session/current', {

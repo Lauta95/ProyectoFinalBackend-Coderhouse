@@ -20,5 +20,5 @@ export const generateToken = (user) => {
 }
 
 export const extractCookie = req => {
-    return (req && req.cookies) ? req.cookies['keyCookieForJWT'] : null
+    return (req && req.cookies) ? req.cookies['auth'] : null
 }

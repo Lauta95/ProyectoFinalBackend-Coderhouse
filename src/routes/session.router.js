@@ -1,6 +1,6 @@
 import { Router } from "express";
 import UserModel from "../DAO/mongoManager/models/user.model.js";
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash, isValidPassword, generateToken } from "../utils.js";
 import passport from "passport";
 
 const router = Router()
@@ -12,8 +12,10 @@ router.get('/register', (req, res) => { res.render('register', {}) })
 
 router.post('/login', passport.authenticate('login', '/login'), async (req, res) => {
     if (!req.user) return res.status(400).send('invalid credentials')
-
-    req.session.user = req.user
+    const { password: _, ...passwordHidden } = req.user.toObject()
+    req.session.user = req.user;
+    const token = generateToken(passwordHidden)
+    res.cookie('auth', token)
     return res.redirect('/profile')
 })
 
@@ -59,7 +61,7 @@ router.get(
 // Ruta para obtener el usuario actual
 router.get('/current', (req, res) => {
     const token = req.headers['auth'];
-    
+
     // debug para ver si se recibe el token
     console.log('Received token:', token);
 
