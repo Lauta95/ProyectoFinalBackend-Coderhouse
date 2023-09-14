@@ -15,9 +15,18 @@ import passport from 'passport'
 import __dirname from './utils.js'
 import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
+import dotenv from 'dotenv'
+
+// config para que tome las variables de entorno:
+dotenv.config()
 
 const app = express()
-const URL = "mongodb+srv://freecodecamp-user:fDlfjlzTXxxBhYva@cluster0.vw59urg.mongodb.net/?retryWrites=true&w=majority"
+
+// se deja en un .env con dotenv la contraseña de la db de mongo: 
+const URL = process.env.URL
+// mostramos por consola la contraseña:
+console.log(URL);
+
 const dbName = 'sessions_backend'
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
