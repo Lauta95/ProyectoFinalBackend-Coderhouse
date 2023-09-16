@@ -1,7 +1,6 @@
 {
   "name": "proyectofinalbackend-coderhouse",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -29,6 +28,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.4.3",
     "mongoose-paginate-v2": "^1.7.31",
+    "node": "^20.6.0",
     "nodemon": "^3.0.1",
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",
@@ -37,5 +37,8 @@
     "passport-local": "^1.0.0",
     "session-file-store": "^1.5.0",
     "socket.io": "^4.7.1"
-  }
+  },
+  "devDependencies": {},
+  "keywords": [],
+  "description": ""
 }

@@ -24,6 +24,7 @@ const app = express()
 
 // se deja en un .env con dotenv la contraseña de la db de mongo: 
 const URL = process.env.URL
+const PORT = process.env.PORT
 // mostramos por consola la contraseña:
 console.log(URL);
 
@@ -76,7 +77,7 @@ app.use('/api/chat', chatRouter)
 app.use('/api/session', sessionRouter)
 
 const runServer = () => {
-    const httpServer = app.listen(8080, () => console.log('listening...'))
+    const httpServer = app.listen(PORT, () => console.log('listening...'))
     const io = new Server(httpServer)
     const messages = [];
     io.on('connection', socket => {
