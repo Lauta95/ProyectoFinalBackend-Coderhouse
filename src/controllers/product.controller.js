@@ -1,25 +1,27 @@
 import ProductModel from '../DAO/mongoManager/models/product.model.js'
+import { createService, findByIdService, limitService } from '../services/product.service.js';
 
 // obtener todos los productos con un limit
 export const limit = async (req, res) => {
     const limit = parseInt(req.query.limit) || undefined;
-    const result = await ProductModel.find().limit(limit);
-    res.send(result);
+    try {
+        const result = await limitService(limit)
+        res.send(result);
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 // obtener un producto por su id router.get
 export const findById = async (req, res) => {
     const productId = req.params.id;
-
     try {
-        const product = await ProductModel.findById(productId);
-        if (product) {
-            res.json(product);
-        } else {
-            res.status(404).json({ error: 'Producto no encontrado' });
-        }
+        const result = await findByIdService(productId)
+        res.send(result)
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener el producto' });
+        const status = error.status || 500
+        const message = error.message || 'internal error'
+        res.status(status).json({ error: message });
     }
 }
 
@@ -27,22 +29,12 @@ export const findById = async (req, res) => {
 export const create = async (req, res) => {
     const { title, description, code, price, status, stock, category, thumbnails } = req.body;
 
-    if (!(title && description && code && price && stock && category && thumbnails)) {
-        return res.status(400).json({ error: 'Faltan campos obligatorios' });
+    try {
+        const result = await createService(title, description, code, price, status, stock, category, thumbnails);
+        res.send(result);
+    } catch(error){
+        console.log('Error: no se pudo crear');
     }
-
-    const data = {
-        title,
-        description,
-        code,
-        price,
-        status: status ?? true,
-        stock,
-        category,
-        thumbnails
-    }
-    const result = await ProductModel.create(data)
-    res.send(result)
 }
 
 // actualizar un producto existente por su id router.put
