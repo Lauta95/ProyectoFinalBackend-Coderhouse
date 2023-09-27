@@ -1,4 +1,5 @@
 import express from 'express'
+// import productController from './controllers/product.controller.js'
 import productRouter from './routes/product.router.js'
 import { Server } from 'socket.io'
 import mongoose from 'mongoose'
