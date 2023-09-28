@@ -1,4 +1,4 @@
-import productModel from "../DAO/mongoManager/models/product.model.js";
+import ProductModel from "../DAO/mongoManager/models/product.model.js";
 import ErrorObject from "../helpers/error.js";
 
 export const limitService = async (limit) => {
@@ -31,6 +31,25 @@ export const createService = async (title, description, code, price, status, sto
     return result;
 }
 
-export const updateOneService = async () => {
-    
+export const updateOneService = async (productId, title, description, code, price, status, stock, category, thumbnails) => {
+    if (!(title && description && code && price && stock && category && thumbnails)) {
+        return res.status(400).json({ error: '2faltan campos obligatorios' })
+    }
+    const updatedData = {
+        title,
+        description,
+        code,
+        price,
+        status: status ?? true,
+        stock,
+        category,
+        thumbnails
+    }
+    const result = await ProductModel.updateOne({ _id: productId }, updatedData);
+    return result;
+}
+
+export const deleteOneService = async (productId) => {
+    const result = await ProductModel.deleteOne({ _id: productId });
+    return result;
 }

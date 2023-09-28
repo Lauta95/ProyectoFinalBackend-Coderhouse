@@ -6,7 +6,7 @@ const router = Router()
 router.get('/', limit)
 router.get('/:id', findById)
 router.post('/', create)
-router.put(':pid', updateOne)
+router.put('/:pid', updateOne)
 router.delete('/:pid', deleteOne)
 
 export default router

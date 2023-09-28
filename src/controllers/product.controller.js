@@ -1,5 +1,5 @@
 import ProductModel from '../DAO/mongoManager/models/product.model.js'
-import { createService, findByIdService, limitService } from '../services/product.service.js';
+import { createService, deleteOneService, findByIdService, limitService, updateOneService } from '../services/product.service.js';
 
 // obtener todos los productos con un limit
 export const limit = async (req, res) => {
@@ -32,7 +32,7 @@ export const create = async (req, res) => {
     try {
         const result = await createService(title, description, code, price, status, stock, category, thumbnails);
         res.send(result);
-    } catch(error){
+    } catch (error) {
         console.log('Error: no se pudo crear');
     }
 }
@@ -41,23 +41,10 @@ export const create = async (req, res) => {
 export const updateOne = async (req, res) => {
     const productId = req.params.pid;
     const { title, description, code, price, status, stock, category, thumbnails } = req.body;
-    if (!(title && description && code && price && stock && category && thumbnails)) {
-        return res.status(400).json({ error: '2faltan campos obligatorios' })
-    }
-    const updatedData = {
-        title,
-        description,
-        code,
-        price,
-        status: status ?? true,
-        stock,
-        category,
-        thumbnails
-    }
     try {
         // updateOne para actualizar el producto por su id
-        const updatedProduct = await ProductModel.updateOne({ _id: productId }, updatedData);
-        if (updatedProduct.nModified > 0) {
+        const updatedProduct = await updateOneService(productId, title, description, code, price, status, stock, category, thumbnails)
+        if (updatedProduct) {
             res.send('Producto actualizado correctamente');
         } else {
             res.status(404).json({ error: 'Producto no encontrado' });
@@ -74,7 +61,7 @@ export const deleteOne = async (req, res) => {
 
     try {
         // deleteOne para borrar el producto por su id
-        const deletedProduct = await ProductModel.deleteOne({ _id: productId });
+        const deletedProduct = await deleteOneService(productId)
         if (deletedProduct.deletedCount > 0) {
             res.send('Producto eliminado correctamente');
         } else {
