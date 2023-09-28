@@ -1,4 +1,3 @@
-import ProductModel from '../DAO/mongoManager/models/product.model.js'
 import { createService, deleteOneService, findByIdService, limitService, updateOneService } from '../services/product.service.js';
 
 // obtener todos los productos con un limit
