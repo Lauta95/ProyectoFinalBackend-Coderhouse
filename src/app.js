@@ -5,6 +5,7 @@ import { Server } from 'socket.io'
 import mongoose from 'mongoose'
 import cartRouter from './routes/cart.router.js'
 import chatRouter from './routes/chat.router.js'
+import ticketRouter from './routes/ticket.router.js'
 import ChatModel from './DAO/mongoManager/models/message.model.js'
 import viewsRouter from './routes/views.router.js'
 import handlebars from 'express-handlebars'
@@ -76,6 +77,7 @@ app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/session', sessionRouter)
+app.use('/api/ticket', ticketRouter)
 
 const runServer = () => {
     const httpServer = app.listen(PORT, () => console.log('listening...'))
