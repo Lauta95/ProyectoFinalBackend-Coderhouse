@@ -1,13 +1,13 @@
-import { createTicketsService } from "../services/ticket.service.js";
+import { createTicketsService, getTicketsByIdService } from "../services/ticket.service.js";
 
 export const createTickets = async (req, res) => {
     const { amount, purchaser } = req.body;
-    
+
     // Verifica que los datos requeridos estén presentes
     if (!amount || !purchaser) {
         return res.status(400).send({ success: false, message: "Se requieren campos 'amount' y 'purchaser'." });
     }
-    
+
     // Aquí puedes agregar más validaciones si es necesario
 
     try {
@@ -27,3 +27,9 @@ export const createTickets = async (req, res) => {
         return res.status(500).send({ success: false, message: "Ocurrió un error interno: " + error.message });
     }
 }
+
+export const getTicketById = async (req, res) => {
+    const cid = req.params.cid;
+    const result = await getTicketsByIdService(cid);
+    return res.send(result)
+} 

@@ -9,10 +9,10 @@ export const getTickets = async () => {
     }
 }
 
-export const getTicketsById = async (id) => {
+export const getTicketsByIdService = async (id) => {
     try {
         const ticket = await ticketsModel.findById(id);
-        return { success: true, content: ticket, message: "Ticket creado con exito" };
+        return { success: true, content: ticket, message: "El ticket existe" };
     } catch (error) {
         return { message: "Ocurrio un error: " + error.message }
     }
