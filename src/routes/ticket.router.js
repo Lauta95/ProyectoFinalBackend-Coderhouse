@@ -4,6 +4,6 @@ import { createTickets, getTicketById } from "../controllers/ticket.controller.j
 const router = Router();
 
 router.post("/:cid/purchase", createTickets)
-router.get("/:cid/ticket", getTicketById)
+router.get("/:cid", getTicketById)
 
 export default router;

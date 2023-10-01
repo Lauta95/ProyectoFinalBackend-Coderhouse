@@ -12,6 +12,7 @@ export const getTickets = async () => {
 export const getTicketsByIdService = async (id) => {
     try {
         const ticket = await ticketsModel.findById(id);
+        console.log(ticket);
         return { success: true, content: ticket, message: "El ticket existe" };
     } catch (error) {
         return { message: "Ocurrio un error: " + error.message }
@@ -19,13 +20,14 @@ export const getTicketsByIdService = async (id) => {
 }
 
 export const createTicketsService = async (ticket) => {
-    const tickets = await getTickets(); // Call getTickets directly
+    const tickets = await getTickets();
     const codeOne = tickets.length
     const nextCode = codeOne ? codeOne + 1 : 1
     const purchase_datetime = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
     try {
         const newTickets = await ticketsModel({ ...ticket, code: nextCode, purchase_datetime: purchase_datetime });
         newTickets.save();
+        console.log(newTickets);
         return { success: true, message: "Ticket creado con exito" }
     } catch (error) {
         return { success: false, message: "Ocurrio un error: " + error.message }

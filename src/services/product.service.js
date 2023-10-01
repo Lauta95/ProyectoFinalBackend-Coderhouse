@@ -27,6 +27,9 @@ export const createService = async (title, description, code, price, status, sto
         category,
         thumbnails
     }
+    if (stock <= 0) {
+        throw new ErrorObject('El producto no tiene stock disponible', 400);
+    }
     const result = await ProductModel.create(data)
     return result;
 }
