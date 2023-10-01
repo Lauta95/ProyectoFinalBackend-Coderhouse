@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { find, findOne, create, findOneBody, pidBody, productDetails, deleteCart, deleteAll } from "../controllers/cart.controller.js"
-// import { cartPurchase } from "../controllers/ticket.controller.js"
 
 const router = Router()
 
@@ -12,6 +11,5 @@ router.put(':cid/products/pid', pidBody)
 router.post(':cid/products:pid', productDetails)
 router.delete('/:cid/products/:pid', deleteCart)
 router.delete('/:cid', deleteAll)
-// router.post("/:cid/purchase", cartPurchase)
 
 export default router

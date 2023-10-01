@@ -77,7 +77,7 @@ app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/session', sessionRouter)
-app.use('/api/ticket', ticketRouter)
+app.use('/api/tickets', ticketRouter)
 
 const runServer = () => {
     const httpServer = app.listen(PORT, () => console.log('listening...'))

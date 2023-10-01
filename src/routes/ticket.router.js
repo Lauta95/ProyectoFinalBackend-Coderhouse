@@ -3,6 +3,6 @@ import { createTickets } from "../controllers/ticket.controller.js"
 
 const router = Router();
 
-router.post("/", createTickets)
+router.post("/:cid/purchase", createTickets)
 
 export default router;

@@ -1,14 +1,29 @@
 import { createTicketsService } from "../services/ticket.service.js";
 
 export const createTickets = async (req, res) => {
-    const ticket = {
-        amount: req.body.amount,
-        purchaser: req.body.purchaser
+    const { amount, purchaser } = req.body;
+    
+    // Verifica que los datos requeridos estén presentes
+    if (!amount || !purchaser) {
+        return res.status(400).send({ success: false, message: "Se requieren campos 'amount' y 'purchaser'." });
     }
+    
+    // Aquí puedes agregar más validaciones si es necesario
+
     try {
-        await createTicketsService(ticket);
-        res.status(200).send({ succes: true, message: "ticket creado con exito" })
+        // Crea el ticket en la base de datos
+        const ticket = {
+            amount,
+            purchaser
+        };
+        const result = await createTicketsService(ticket);
+
+        if (result.success) {
+            return res.status(201).send({ success: true, message: "Ticket creado con éxito" });
+        } else {
+            return res.status(500).send({ success: false, message: result.message });
+        }
     } catch (error) {
-        res.status(404).send({ succes: false, message: error.message })
+        return res.status(500).send({ success: false, message: "Ocurrió un error interno: " + error.message });
     }
 }
