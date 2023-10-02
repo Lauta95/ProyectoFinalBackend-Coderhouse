@@ -3,15 +3,11 @@ import { createTicketsService, getTicketsByIdService } from "../services/ticket.
 export const createTickets = async (req, res) => {
     const { amount, purchaser } = req.body;
 
-    // Verifica que los datos requeridos estén presentes
     if (!amount || !purchaser) {
         return res.status(400).send({ success: false, message: "Se requieren campos 'amount' y 'purchaser'." });
     }
 
-    // Aquí puedes agregar más validaciones si es necesario
-
     try {
-        // Crea el ticket en la base de datos
         const ticket = {
             amount,
             purchaser

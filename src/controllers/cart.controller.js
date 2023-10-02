@@ -1,4 +1,4 @@
-import { deleteAllService, deleteCartService, findOneBodyService, findOneService, findService, pidBodyService, productDetailsService } from "../services/cart.service.js"
+import { deleteAllService, deleteCartService, findOneBodyService, findOneService, findService, pidBodyService, productDetailsService, addToCartService } from "../services/cart.service.js"
 
 export const find = async (req, res) => {
     const result = await findService()
@@ -69,3 +69,14 @@ export const deleteAll = async (req, res) => {
     res.send({ status: 'success', message: 'Cart deleted successfully' });
 }
 
+export const addToCart = async (req, res) => {
+    const { cid } = req.params
+    const { productId, quantity } = req.body;
+
+    try {
+        const result = await addToCartService(cid, productId, quantity);
+        res.send(result);
+    } catch (error) {
+        res.status(400).send({ success: false, message: error.message });
+    }
+};
