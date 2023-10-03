@@ -156,6 +156,7 @@ router.get('/products', async (req, res) => {
     res.render('products', {
         cartId,
         // user para renderizar:
+        carts,
         user,
         products: result.docs,
         totalPages: result.totalPages,

@@ -68,46 +68,37 @@ export const deleteAllService = async(cid) => {
 
 export const addToCartService = async (cid, productId, quantity) => {
     try {
-        // Retrieve the cart by its ID
         const cart = await CartModel.findOne({ _id: cid });
 
         if (!cart) {
             throw new Error('Cart not found');
         }
 
-        // Retrieve the product by its ID
         const product = await ProductModel.findById(productId);
 
         if (!product) {
             throw new Error('Product not found');
         }
 
-        // Check if there is sufficient stock
         if (product.stock < quantity) {
             throw new Error('Insufficient stock');
         }
 
-        // Check if the product is already in the cart
         const existingProductIndex = cart.products.findIndex((item) => item.productId.toString() === productId);
 
         if (existingProductIndex !== -1) {
-            // Update the quantity of the existing product
             cart.products[existingProductIndex].quantity += quantity;
         } else {
-            // Add the product to the cart with the specified quantity
             cart.products.push({
                 productId,
                 quantity
             });
         }
 
-        // Save the updated cart
         const updatedCart = await cart.save();
 
-        // Deduct the purchased quantity from the product's stock
         product.stock -= quantity;
 
-        // Save the updated product with the decreased stock
         await product.save();
 
         return updatedCart;

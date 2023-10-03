@@ -1,4 +1,5 @@
 import ticketsModel from "../DAO/mongoManager/models/ticket.model.js";
+import ProductModel from "../DAO/mongoManager/models/product.model.js";
 
 export const getTickets = async () => {
     try {
