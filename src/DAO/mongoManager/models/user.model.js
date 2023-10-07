@@ -14,7 +14,8 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
         type: String,
         enum: ['usuario', 'admin'], // Definir los posibles roles
         default: 'usuario', // Establecer un valor predeterminado
-    }
+    },
+    cartId: { type: mongoose.Schema.Types.ObjectId, ref: "carts" }
 }))
 
 export default UserModel

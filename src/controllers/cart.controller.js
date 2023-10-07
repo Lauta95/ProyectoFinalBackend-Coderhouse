@@ -1,4 +1,6 @@
-import { deleteAllService, deleteCartService, findOneBodyService, findOneService, findService, pidBodyService, productDetailsService, addToCartService, createService } from "../services/cart.service.js"
+import { deleteAllService, deleteCartService, findOneBodyService, findOneService, findService, pidBodyService, productDetailsService, addToCartService, createService, purchaseCartService } from "../services/cart.service.js"
+
+
 
 export const find = async (req, res) => {
     const result = await findService()
@@ -80,3 +82,22 @@ export const addToCart = async (req, res) => {
         res.status(400).send({ success: false, message: error.message });
     }
 };
+
+export const purchaseCart = async (req, res) => {
+    const user = req.user
+    console.log(req.user);
+
+    const { cid } = req.params
+    try {
+
+        const result = await purchaseCartService(user, cid);
+
+        if (result.success) {
+            return res.status(201).send({ success: true, message: "Ticket creado con éxito" });
+        } else {
+            return res.status(500).send({ success: false, message: result.message });
+        }
+    } catch (error) {
+        return res.status(500).send({ success: false, message: "Ocurrió un error interno: ", error});
+    }
+}

@@ -5,6 +5,7 @@ import { createHash, extractCookie, isValidPassword, generateToken } from '../ut
 import passportGoogle from 'passport-google-oauth20'
 import GitHubStrategy from 'passport-github2'
 import passportJWT from 'passport-jwt'
+import CartModel from '../DAO/mongoManager/models/cart.model.js';
 
 
 // GH->
@@ -118,14 +119,18 @@ const initializePassport = () => {
                     console.log('user already exists');
                     return done(null, false)
                 }
+                const cart = await CartModel.create({ products: [] })
+                console.log(cart);
                 const newUser = {
                     first_name,
                     last_name,
                     age,
                     email,
-                    password: createHash(password)
+                    password: createHash(password),
+                    cartId: cart._id
                 }
                 const result = await UserModel.create(newUser)
+
                 return done(null, result)
             } catch (e) {
                 return done('error to register ' + e)

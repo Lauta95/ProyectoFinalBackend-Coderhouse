@@ -1,5 +1,6 @@
 import ticketsModel from "../DAO/mongoManager/models/ticket.model.js";
 import ProductModel from "../DAO/mongoManager/models/product.model.js";
+import { findOneService } from "./cart.service.js"
 
 export const getTickets = async () => {
     try {
@@ -24,9 +25,34 @@ export const createTicketsService = async (ticket) => {
     const tickets = await getTickets();
     const codeOne = tickets.length
     const nextCode = codeOne ? codeOne + 1 : 1
+
+    const cart = findOneService(ticket.cartId)
+
     const purchase_datetime = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+
     try {
         const newTickets = await ticketsModel({ ...ticket, code: nextCode, purchase_datetime: purchase_datetime });
+
+        cart.products.forEach(p => {
+            console.log(p);
+            if (p.quantity < p.productId.stock) {
+                newTickets.amount += p.productId.price * p.quantity
+                // Call propductServices hacemo sun update al stock de ese producto
+
+            }
+        })
+
+        // if (product.stock < quantity) {
+        //     throw new Error('Insufficient stock');
+        // }
+
+        // const updatedCart = await cart.save();
+
+        // product.stock -= quantity;
+
+        // await product.save();
+
+
         newTickets.save();
         console.log(newTickets);
         return { success: true, message: "Ticket creado con exito" }

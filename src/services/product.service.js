@@ -52,6 +52,13 @@ export const updateOneService = async (productId, title, description, code, pric
     return result;
 }
 
+export const updateStock = async (productId, stock) => {
+    console.log(productId);
+    const product = findByIdService(productId)
+    const productoo = await ProductModel.updateOne({ _id: productId }, { stock })
+    console.log("productoo: ", productoo);
+}
+
 export const deleteOneService = async (productId) => {
     const result = await ProductModel.deleteOne({ _id: productId });
     return result;

@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { find, findOne, create, findOneBody, pidBody, productDetails, deleteCart, deleteAll, addToCart } from "../controllers/cart.controller.js"
-import { createTickets } from "../controllers/ticket.controller.js";
+import { find, findOne, create, findOneBody, pidBody, productDetails, deleteCart, deleteAll, addToCart, purchaseCart } from "../controllers/cart.controller.js"
+import passport from "passport";
+import { isAdmin } from "../middlewares/isadmin.js";
+import { isOwner } from "../middlewares/isowner.js";
 
 const router = Router()
 
@@ -13,6 +15,6 @@ router.post('/:cid/products/:pid', productDetails)
 router.delete('/:cid/products/:pid', deleteCart)
 router.delete('/:cid', deleteAll)
 router.post('/:cid/add', addToCart)
-router.post("/:cid/purchase", createTickets)
+router.post("/:cid/purchase", passport.authenticate('jwt', { session: false }), isOwner, purchaseCart)
 
 export default router
