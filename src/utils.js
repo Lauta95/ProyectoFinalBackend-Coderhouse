@@ -5,6 +5,7 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 import bcrypt from 'bcrypt'
 export default __dirname
+import { faker } from '@faker-js/faker'
 
 export const createHash = (password) => {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10))
@@ -21,4 +22,12 @@ export const generateToken = (user) => {
 
 export const extractCookie = req => {
     return (req && req.cookies) ? req.cookies['auth'] : null
+}
+
+export const generateProduct = () => {
+    return {
+        title: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        price: faker.commerce.price()
+    }
 }
