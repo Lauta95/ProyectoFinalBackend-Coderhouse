@@ -6,6 +6,9 @@ import passportGoogle from 'passport-google-oauth20'
 import GitHubStrategy from 'passport-github2'
 import passportJWT from 'passport-jwt'
 import CartModel from '../DAO/mongoManager/models/cart.model.js';
+import { generateUserErrorInfo } from '../services/errors/info.js';
+import CustomError from '../services/errors/custom_error.js';
+import EErrors from '../services/errors/enums.js';
 
 
 // GH->
@@ -116,8 +119,15 @@ const initializePassport = () => {
             try {
                 const user = await UserModel.findOne({ email: username })
                 if (user) {
-                    console.log('user already exists');
-                    return done(null, false)
+                    CustomError.createError({
+                        name: 'user creation error',
+                        cause: generateUserErrorInfo(user),
+                        message: 'error al intentar crear usuario, usuario ya existe',
+                        code: EErrors.DATABASES_ERROR
+                    })
+
+                    // console.log('user already exists');
+                    // return done(null, false)
                 }
                 const cart = await CartModel.create({ products: [] })
                 console.log(cart);
