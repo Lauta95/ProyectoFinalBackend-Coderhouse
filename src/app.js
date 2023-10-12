@@ -18,6 +18,7 @@ import __dirname from './utils.js'
 import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
+import { addLogger } from './logger.js'
 
 // config para que tome las variables de entorno:
 dotenv.config()
@@ -71,6 +72,7 @@ app.use(session({
 initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(addLogger)
 
 app.use('/', viewsRouter)
 app.use('/api/products', productRouter)
@@ -78,6 +80,13 @@ app.use('/api/carts', cartRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/session', sessionRouter)
 app.use('/api/tickets', ticketRouter)
+
+app.get('/logger', (req, res) => {
+    req.logger.error(`server caido`)
+    req.logger.warn(`aviso de warning`)
+    req.logger.info(`haz ingresado al logger url`)
+    req.logger.debug(`esto es un debug`)
+})
 
 const runServer = () => {
     const httpServer = app.listen(PORT, () => console.log('listening...'))
