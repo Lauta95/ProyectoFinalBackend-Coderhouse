@@ -10,3 +10,5 @@ export const isAdmin = async (req, res, next) => {
         next(err);
     }
 };
+
+// crear como isadmin pero premium

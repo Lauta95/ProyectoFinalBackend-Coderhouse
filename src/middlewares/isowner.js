@@ -12,3 +12,5 @@ export const isOwner = async (req, res, next) => {
         next(err);
     }
 };
+
+// validar que un usuario sea dueño del producto.

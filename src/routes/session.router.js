@@ -1,7 +1,10 @@
 import { Router } from "express";
 import UserModel from "../DAO/mongoManager/models/user.model.js";
-import { createHash, isValidPassword, generateToken } from "../utils.js";
+import { createHash, isValidPassword, generateToken, generateTokenMail } from "../utils.js";
 import passport from "passport";
+import Mail from "../modules/mail.js";
+import jwt from "jsonwebtoken"
+import CustomError from "../services/errors/custom_error.js";
 
 const router = Router()
 router.get('/api/session/login-github', (req, res) => {
@@ -90,5 +93,54 @@ router.get('/current', (req, res) => {
         res.json({ user });
     })(req, res);
 });
+
+router.post('/recover', async (req, res) => {
+    const email = req.body;
+    const token = generateTokenMail(email)
+    const mailer = new Mail
+
+    await mailer.send(email, 'restablecer contraseña', `<a href="http://127.0.0.1:8080/api/session/reset/${token}">recuperar contraseña</a>`)
+
+    res.send('mail enviado!')
+
+
+})
+
+router.post('/reset/:token', async (req, res) => {
+    try {
+        const { token } = req.params
+        const { password } = req.body
+
+        const user = await jwt.verify(token, 'secretForJWT')
+
+        console.log(user, 'USEREMAIL:::');
+        const email = user.mail.email
+        const userFound = await UserModel.findOne({ email })
+        console.log(userFound);
+        const passwordIsMatch = await isValidPassword(userFound, password)
+        console.log('VERPASS:::>', passwordIsMatch, password);
+        if (passwordIsMatch) {
+            // CustomError({
+            //     name: 'las contraseñas deben ser diferentes',
+            //     cause: 'se repite contraseña',
+            //     message: 'asd',
+            //     code: 400
+            // })
+
+            console.log('error');
+        }
+        const passwordHashed = await createHash(password)
+        console.log(passwordHashed);
+        console.log(userFound.password);
+        const userUpdated = await UserModel.updateOne({ email }, { password: passwordHashed })
+        console.log(userUpdated);
+        res.send('contraseña actualizada')
+    } catch (error) {
+        console.log(error);
+        res.send(error)
+    }
+
+
+})
 
 export default router

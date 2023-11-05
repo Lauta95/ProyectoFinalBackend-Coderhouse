@@ -16,7 +16,7 @@ export default class Mail {
     send = async(user, subject, html) => {
         const result = await this.transport.sendMail({
             from: config.mailUser,
-            to: user.emaiil,
+            to: user.email,
             subject,
             html
         })

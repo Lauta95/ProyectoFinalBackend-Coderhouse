@@ -20,6 +20,10 @@ export const generateToken = (user) => {
     return jwt.sign({ user }, 'secretForJWT', { expiresIn: '7d' })
 }
 
+export const generateTokenMail = (mail) => {
+    return jwt.sign({ mail }, 'secretForJWT', { expiresIn: '1h' })
+}
+
 export const extractCookie = req => {
     return (req && req.cookies) ? req.cookies['auth'] : null
 }
