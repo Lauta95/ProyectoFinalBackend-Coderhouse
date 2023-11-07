@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { limit, findById, create, updateOne, deleteOne } from "../controllers/product.controller.js"
-import { isAdmin } from "../middlewares/isadmin.js";
+import { isAdmin, isPremium } from "../middlewares/isadmin.js";
 import passport from "passport";
 import { generateProduct } from '../utils.js'
 
@@ -18,6 +18,7 @@ router.get('/mockingproducts', async(req,res) => {
 router.get('/', limit)
 router.get('/:id', findById)
 router.post('/', passport.authenticate('jwt', { session: false }), isAdmin, create)
+router.post('/premium', passport.authenticate('jwt', { session: false }), isPremium, create)
 router.put('/:pid', updateOne)
 router.delete('/:pid', deleteOne)
 

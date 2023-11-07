@@ -12,3 +12,16 @@ export const isAdmin = async (req, res, next) => {
 };
 
 // crear como isadmin pero premium
+
+export const isPremium = async (req, res, next) => {
+    try {
+        const { user } = req.user;
+        console.log('IS PREMIUM?:', user);
+        if(user.role != 'premium') {
+            return res.status(403).send({message: 'not authorized'});
+        }
+        next();
+    }catch(err) {
+        next(err)
+    }
+}
