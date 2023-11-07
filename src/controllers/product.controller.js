@@ -26,10 +26,10 @@ export const findById = async (req, res) => {
 
 // crear un nuevo producto
 export const create = async (req, res) => {
-    const { title, description, code, price, status, stock, category, thumbnails } = req.body;
+    const { title, description, code, price, status, stock, category, thumbnails, owner } = req.body;
 
     try {
-        const result = await createService(title, description, code, price, status, stock, category, thumbnails);
+        const result = await createService(title, description, code, price, status, stock, category, thumbnails, owner);
         res.send(result);
     } catch (error) {
         console.log('Error: no se pudo crear');

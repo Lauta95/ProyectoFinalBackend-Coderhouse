@@ -1,3 +1,4 @@
+import { userInfo } from "os";
 import ProductModel from "../DAO/mongoManager/models/product.model.js";
 import ErrorObject from "../helpers/error.js";
 
@@ -13,7 +14,7 @@ export const findByIdService = async (id) => {
     return product
 }
 
-export const createService = async (title, description, code, price, status, stock, category, thumbnails) => {
+export const createService = async (title, description, code, price, status, stock, category, thumbnails, owner) => {
     if (!(title && description && code && price && stock && category && thumbnails)) {
         return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
@@ -25,7 +26,8 @@ export const createService = async (title, description, code, price, status, sto
         status: status ?? true,
         stock,
         category,
-        thumbnails
+        thumbnails,
+        owner
     }
     if (stock <= 0) {
         throw new ErrorObject('El producto no tiene stock disponible', 400);
