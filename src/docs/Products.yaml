@@ -1,0 +1,17 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos son mostrados satisfactoriamente 
+  /api/products/{id}:
+    get:
+      summary: Obtiene un producto por id
+      tags:
+        - Products
+      responses:
+        "200":
+          description: El producto fue mostrado satisfactoriamente

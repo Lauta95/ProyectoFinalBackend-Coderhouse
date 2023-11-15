@@ -19,6 +19,10 @@ import initializePassport from './config/passport.config.js'
 import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import { addLogger } from './logger.js'
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
+
+
 
 // config para que tome las variables de entorno:
 dotenv.config()
@@ -74,12 +78,26 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(addLogger)
 
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentación de productos',
+            description: 'Este proyecto es un ecommerce de juegos'
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+}
+
 app.use('/', viewsRouter)
 app.use('/api/products', productRouter)
 app.use('/api/carts', cartRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/session', sessionRouter)
 app.use('/api/tickets', ticketRouter)
+const specs = swaggerJSDoc(swaggerOptions)
+// para ver la documentacion de forma grafica:
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 app.get('/logger', (req, res) => {
     req.logger.error(`server caido`)
