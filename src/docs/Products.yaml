@@ -7,6 +7,23 @@ paths:
       responses:
         "200":
           description: Los productos son mostrados satisfactoriamente 
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/product'
+        "500":
+          description: Error interno del server.
+    post:
+      summary: Crear un producto como Admin
+      tags:
+        - Products
+      responses:
+        "200":
+          description: El producto fue creado satisfactoriamente como admin
+        "500":
+          description: Error interno del server
   /api/products/{id}:
     get:
       summary: Obtiene un producto por id
@@ -15,3 +32,74 @@ paths:
       responses:
         "200":
           description: El producto fue mostrado satisfactoriamente
+        "500":
+          description: Error interno del server.
+        "404":
+          description: No se encontro ID
+  /api/products/premium:
+    post:
+      summary: Crear un producto como premium
+      tags:
+        - Products
+      responses:
+        "200":
+          description: El producto fue creado satisfactoriamente como premium
+        "500":
+          description: Error interno del server
+  /api/products/{pid}:
+    put:
+      summary: Actualizar un producto
+      tags:
+        - Products
+      responses:
+        "200":
+          description: El producto fue actualizado satisfactoriamente
+        "500":
+          description: Error interno del server
+    delete:
+      summary: Eliminar un producto
+      tags:
+        - Products
+      responses:
+        "200":
+          description: El producto fue eliminado satisfactoriamente
+        "500":
+          description: Error interno del server
+components:
+  schemas:
+    product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID auto generado por mongo
+        code:
+          type: string
+          description: Codigo del producto
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Breve descripcion del producto
+        price:
+          type: number
+          description: Precio del producto en dolares Estadounidenses
+        category:
+          type: string
+          description: Tipo de producto
+        thumbnails:
+          type: string
+          description: Guarda informacion sobre las miniaturas para mostrar
+        stock:
+          type: number
+          description: Cantidad de productos disponibles
+      example:
+        _id: ObjectId('64cfb3319d4e934a43a6ac62')
+        code: "manzanaprod123"
+        title: "Manzanas"
+        description: "Deliciosas manzanas locales"
+        price: 1
+        category: "Frutas"
+        thumbnails: "https://elegifruta.com.ar/wp-content/uploads/2017/07/manzana_roja.jpg"
+        stock: 353
