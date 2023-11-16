@@ -1,0 +1,59 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtener todos los productos agregados al carrito
+      tags:
+        - Cart
+      responses:
+        "200":
+          description: Los productos agregados al carrito son mostrados satisfactoriamente
+        "500":
+          description: Error interno del server
+    post:
+      summary: Crea un carrito
+      tags:
+        - Cart
+      responses:
+        "200":
+          description: El carrito fue creado satisfactoriamente
+        "500":
+          description: Error interno del server
+  /api/carts/{cid}:
+    get:
+      summary: Obtener un carrito con su ID
+      tags:
+        - CartID
+      responses:
+        "200":
+          description: El carrito fue mostrado satisfactoriamente
+        "500":
+          description: Error interno del server
+    put:
+      summary: Actualizar el carrito con su ID
+      tags:
+        - CartID
+      responses:
+        "200":
+          description: El carrito fue actualizado satisfactoriamente
+        "500":
+          description: Error interno del server
+    delete:
+      summary: Eliminar carrito entero con su ID
+      tags:
+        - CartID
+      responses:
+        "200":
+          description: El carrito fue eliminado satisfactoriamente
+        "500":
+          description: Error interno del server
+  /api/products/{pid}:
+    put:
+      summary: Actualizar cantidad de ejemplares del producto por cualquier cantidad pasada desde el Body
+      tags:
+        - CartProductID
+      responses:
+        "200":
+          description: El carrito se ha actualizado satisfactoriamente
+        "500":
+          description: Error interno del server
+    

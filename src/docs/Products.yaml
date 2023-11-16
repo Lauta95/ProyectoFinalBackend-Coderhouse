@@ -34,7 +34,7 @@ paths:
     get:
       summary: Obtiene un producto por id
       tags:
-        - Products
+        - ProductsID
       responses:
         "200":
           description: El producto fue mostrado satisfactoriamente
@@ -56,7 +56,7 @@ paths:
     put:
       summary: Actualizar un producto
       tags:
-        - Products
+        - ProductsID
       responses:
         "200":
           description: El producto fue actualizado satisfactoriamente
@@ -65,7 +65,7 @@ paths:
     delete:
       summary: Eliminar un producto
       tags:
-        - Products
+        - ProductsID
       responses:
         "200":
           description: El producto fue eliminado satisfactoriamente
