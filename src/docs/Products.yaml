@@ -19,6 +19,12 @@ paths:
       summary: Crear un producto como Admin
       tags:
         - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/insertProduct'
       responses:
         "200":
           description: El producto fue creado satisfactoriamente como admin
@@ -103,3 +109,28 @@ components:
         category: "Frutas"
         thumbnails: "https://elegifruta.com.ar/wp-content/uploads/2017/07/manzana_roja.jpg"
         stock: 353
+  requestBodies:
+    insertProduct:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Codigo del producto
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Breve descripcion del producto
+        price:
+          type: number
+          description: Precio del producto en dolares Estadounidenses
+        category:
+          type: string
+          description: Tipo de producto
+        thumbnails:
+          type: string
+          description: Guarda informacion sobre las miniaturas para mostrar
+        stock:
+          type: number
+          description: Cantidad de productos disponibles
