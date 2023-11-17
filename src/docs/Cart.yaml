@@ -46,7 +46,7 @@ paths:
           description: El carrito fue eliminado satisfactoriamente
         "500":
           description: Error interno del server
-  /api/products/{pid}:
+  /api/carts/{pid}:
     put:
       summary: Actualizar cantidad de ejemplares del producto por cualquier cantidad pasada desde el Body
       tags:
@@ -56,4 +56,52 @@ paths:
           description: El carrito se ha actualizado satisfactoriamente
         "500":
           description: Error interno del server
-    
+  /api/carts/{cid}/products/pid:
+    put:
+      summary: Actualizar solamente la cantidad de ejemplares del producto por cualquier cantidad pasada desde el req.body
+      tags:
+        - CartProductBody
+      responses:
+        "200":
+          description: El carrito se ha actualizado satisfactoriamente
+        "500":
+          description: Error interno del server
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Agregar al carrito con el boton
+      tags:
+        - CartButton
+      responses:
+        "200": 
+          description: El carrito se ha actualizado satisfactoriamente
+        "500":
+          description: Error interno del server
+    delete:
+      summary: Borrar del carrito el producto seleccionado
+      tags:
+        - CartButton
+      responses:
+        "200":
+          description: El carrito se ha actualizado satisfactoriamente
+        "500":
+          description: Error interno del server
+  /api/carts/{cid}/add:
+    post:
+      summary: Agregar a un carrito una cantidad determinada por body
+      tags:
+        - CartBody
+      responses:
+        "200":
+          description: La cantidad fue agregada satisfactoriamente
+        "500":
+          description: Error interno del server
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Agregar a un carrito siendo propietario del producto
+      tags:
+        - CartOwner
+      responses:
+        "200":
+          description: El producto fue creado satisfactoriamente
+        "500":
+          description: Error interno del server
