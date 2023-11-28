@@ -1,4 +1,4 @@
-import ProductManager from "../DAO/fileManager/product.service.js";
+import CartManager from "../DAO/fileManager/cart.service.js";
 import Assert from "assert";
 import dotenv from 'dotenv'
 import mongoose from "mongoose";
@@ -17,8 +17,8 @@ describe("testing", () => {
         this.timeout(8000)
     })
 
-    it('El dao debe poder obtener los productos', async function () {
-        const usersDao = new ProductManager()
+    it('El dao debe poder obtener los carritos', async function () {
+        const usersDao = new CartManager()
         const result = await usersDao.list()
 
         assert.strictEqual(Array.isArray(result), true)
