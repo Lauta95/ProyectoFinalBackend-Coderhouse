@@ -15,7 +15,15 @@ const UserModel = mongoose.model('users', new mongoose.Schema({
         enum: ['usuario', 'admin', 'premium'], // Definir los posibles roles
         default: 'usuario', // Establecer un valor predeterminado
     },
-    cartId: { type: mongoose.Schema.Types.ObjectId, ref: "carts" }
+    cartId: { type: mongoose.Schema.Types.ObjectId, ref: "carts" },
+    documents: [{
+        name: String,
+        reference: String,
+    }],
+    last_connection:  {
+        type: String,
+        default: ''
+    },
 }))
 
 export default UserModel

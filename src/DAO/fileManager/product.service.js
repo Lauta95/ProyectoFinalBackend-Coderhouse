@@ -32,3 +32,4 @@ export default class ProductManager extends FileManager {
         return 'ok';
     };
 }
+// repositories 

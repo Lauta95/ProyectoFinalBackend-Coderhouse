@@ -18,8 +18,22 @@ router.post('/login', passport.authenticate('login', '/login'), async (req, res)
     const { password: _, ...passwordHidden } = req.user.toObject()
     req.session.user = req.user;
     const token = generateToken(passwordHidden)
-    res.cookie('auth', token)
+    res.cookie('auth', token) 
+    await UserModel.findByIdAndUpdate(req.user._id, {
+        last_connection: new Date().toLocaleString()
+    })
+    console.log("COMMENT: ", req.user);
+
     return res.redirect('/profile')
+})
+
+router.post('/logout', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    
+    res.cookie('auth', '') 
+    await UserModel.findByIdAndUpdate(req.user._id, {
+        last_connection: new Date().toLocaleString()
+    })
+    res.redirect('/')
 })
 
 router.post(
