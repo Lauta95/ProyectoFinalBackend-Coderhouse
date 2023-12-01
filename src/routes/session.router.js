@@ -5,6 +5,7 @@ import passport from "passport";
 import Mail from "../modules/mail.js";
 import jwt from "jsonwebtoken"
 import CustomError from "../services/errors/custom_error.js";
+import upload from '../middlewares/multer.js'
 
 const router = Router()
 router.get('/api/session/login-github', (req, res) => {
@@ -18,7 +19,7 @@ router.post('/login', passport.authenticate('login', '/login'), async (req, res)
     const { password: _, ...passwordHidden } = req.user.toObject()
     req.session.user = req.user;
     const token = generateToken(passwordHidden)
-    res.cookie('auth', token) 
+    res.cookie('auth', token)
     await UserModel.findByIdAndUpdate(req.user._id, {
         last_connection: new Date().toLocaleString()
     })
@@ -28,13 +29,57 @@ router.post('/login', passport.authenticate('login', '/login'), async (req, res)
 })
 
 router.post('/logout', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    
-    res.cookie('auth', '') 
+
+    res.cookie('auth', '')
     await UserModel.findByIdAndUpdate(req.user._id, {
         last_connection: new Date().toLocaleString()
     })
     res.redirect('/')
 })
+
+router.post('/documents', passport.authenticate('jwt', { session: false }), upload.single('file'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send({ status: 'error', error: 'no file' })
+    }
+    console.log(req.file);
+    await UserModel.findByIdAndUpdate(req.user._id, {
+        documents: [{
+            name: req.file.originalname,
+            reference: req.file.path
+        }]
+    })
+    res.send('file uploaded')
+});
+
+router.post('/:uid', passport.authenticate('jwt', { session: false }),)
+
+router.post('/profile', passport.authenticate('jwt', { session: false }), upload.single('file'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send({ status: 'error', error: 'no file' })
+    }
+    console.log(req.file);
+    await UserModel.findByIdAndUpdate(req.user._id, {
+        documents: [{
+            name: req.file.originalname,
+            reference: req.file.path
+        }]
+    })
+    res.send('file uploaded')
+});
+
+router.post('/products', passport.authenticate('jwt', { session: false }), upload.single('file'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).send({ status: 'error', error: 'no file' })
+    }
+    console.log(req.file);
+    await UserModel.findByIdAndUpdate(req.user._id, {
+        documents: [{
+            name: req.file.originalname,
+            reference: req.file.path
+        }]
+    })
+    res.send('file uploaded')
+});
 
 router.post(
     '/register',
