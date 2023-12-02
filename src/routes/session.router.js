@@ -37,6 +37,7 @@ router.post('/logout', passport.authenticate('jwt', { session: false }), async (
     res.redirect('/')
 })
 
+// si se desea subir un documento, el link va a redirigir al siguiente endpoint:
 router.post('/documents', passport.authenticate('jwt', { session: false }), upload.single('file'), async (req, res) => {
     if (!req.file) {
         return res.status(400).send({ status: 'error', error: 'no file' })
@@ -51,8 +52,35 @@ router.post('/documents', passport.authenticate('jwt', { session: false }), uplo
     res.send('file uploaded')
 });
 
-router.post('/:uid', passport.authenticate('jwt', { session: false }),)
+router.get(
+    "/premium/:uid",
+    passport.authenticate("jwt", { session: false }), async (req, res) => {
+        try {
+            const id = req.params.uid;
+            const user = await UserModel.findByIdAndUpdate(id);
+            if (user) {
+                if (user.role === "admin") {
+                    console.error(error);
+                }
+                if (user.role === "usuario") {
+                    user.role = "premium";
+                    await UserModel.findByIdAndUpdate(user._id, user);
+                    return res.render("profile", user);
+                }
+                user.role = "usuario";
+                await UserModel.findByIdAndUpdate(user._id, user);
+                return res.render("profile", user);
+            } else {
+                console.error(error);
+            }
+        } catch (error) {
+            console.log("Error al cambiar a usuario premium");
+            res.status(500).json({ error: error.message });
+        }
+    });
 
+
+// si se desea subir una imagen de perfil, el link va a redirigir al siguiente endpoint:
 router.post('/profile', passport.authenticate('jwt', { session: false }), upload.single('file'), async (req, res) => {
     if (!req.file) {
         return res.status(400).send({ status: 'error', error: 'no file' })
@@ -67,6 +95,7 @@ router.post('/profile', passport.authenticate('jwt', { session: false }), upload
     res.send('file uploaded')
 });
 
+// si se desea subir una imagen de producto, el link va a redirigir al siguiente endpoint:
 router.post('/products', passport.authenticate('jwt', { session: false }), upload.single('file'), async (req, res) => {
     if (!req.file) {
         return res.status(400).send({ status: 'error', error: 'no file' })
@@ -164,7 +193,6 @@ router.post('/recover', async (req, res) => {
 
 
 })
-
 router.post('/reset/:token', async (req, res) => {
     try {
         const { token } = req.params
