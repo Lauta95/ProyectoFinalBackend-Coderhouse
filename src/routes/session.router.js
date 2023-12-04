@@ -11,7 +11,7 @@ const router = Router()
 router.get('/api/session/login-github', (req, res) => {
     res.render('home', {})
 })
-router.get('/login', (req, res) => { res.render('login', {}) })
+// router.get('/login', (req, res) => { res.render('login', {}) })
 router.get('/register', (req, res) => { res.render('register', {}) })
 
 router.post('/login', passport.authenticate('login', '/login'), async (req, res) => {
@@ -23,8 +23,8 @@ router.post('/login', passport.authenticate('login', '/login'), async (req, res)
     await UserModel.findByIdAndUpdate(req.user._id, {
         last_connection: new Date().toLocaleString()
     })
-    console.log("COMMENT: ", req.user);
-
+    // console.log("COMMENT: ", req.user);
+    { res.render('login', {}) }
     return res.redirect('/profile')
 })
 
