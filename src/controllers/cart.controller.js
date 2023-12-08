@@ -47,10 +47,10 @@ export const productDetails = async (req, res) => {
 
     try {
         const cart = await productDetailsService(cid, pid, quantity);
-        console.log(cart);
         // para ir al carrito una vez agregado:
-        const updatedCart = await productDetailsService(cid)
-        res.render('cartDetails', { cart: updatedCart });
+        // const updatedCart = await productDetailsService(cid)
+        console.log(cart);
+        res.render('cartDetails', { cart });
     } catch (error) {
         res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
@@ -98,6 +98,6 @@ export const purchaseCart = async (req, res) => {
             return res.status(500).send({ success: false, message: result.message });
         }
     } catch (error) {
-        return res.status(500).send({ success: false, message: "Ocurrió un error interno: ", error});
+        return res.status(500).send({ success: false, message: "Ocurrió un error interno: ", error });
     }
 }
