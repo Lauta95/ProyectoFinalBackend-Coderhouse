@@ -47,12 +47,18 @@ export const productDetailsService = async (cid, pid, quantity) => {
     if (existingProduct) {
         existingProduct.quantity += parseInt(quantity, 10);
     } else {
-        cart.products.push({ productId: pid, quantity: parseInt(quantity, 10) });
+        const product = await ProductModel.findById(pid);
+        cart.products.push({
+            productId: pid,
+            title: product.title,
+            price: product.price,
+            quantity: parseInt(quantity, 10),
+        });
     }
 
     const result = await cart.save();
     const updatedCart = await CartModel.findOne({ _id: cid }).populate('products.productId');
-    return result;
+    return updatedCart;
     // para ir al carrito una vez agregado:
 }
 
@@ -141,14 +147,14 @@ export const purchaseCartService = async (user, cartId) => {
 
 
 //     try {
-    //agregar lo que FALTA ACÁ
+//agregar lo que FALTA ACÁ
 // AGREGAR EL ARRAY DE PRODCUTOS AL MODELO DE TICKETS
-    //    const newTickets = await ticketsModel({ code: nextCode, purchase_datetime: purchase_datetime, purchase: user._id });
+//    const newTickets = await ticketsModel({ code: nextCode, purchase_datetime: purchase_datetime, purchase: user._id });
 // AGREGAR ESTO AL MODELO DE TICKETS
-    // products: {
-    //     type: [], 
-    //     default: []
-    // },
+// products: {
+//     type: [],
+//     default: []
+// },
 
 
 //         // if (product.stock < quantity) {
