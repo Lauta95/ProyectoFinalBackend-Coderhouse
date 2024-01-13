@@ -218,4 +218,8 @@ router.get('/current', (req,res)=>{
     res.render('current', {})
 })
 
+// router.get('/profile', (req,res)=>{
+//     res.render('profile', user.user)
+// })
+
 export default router
