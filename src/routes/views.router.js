@@ -29,7 +29,6 @@ router.get('/register', (req, res) => {
 // middleware para el profile: si existe la sesion, te manda al /profile con el middleware next()... si no te manda de nuevo al login
 function auth(req, res, next) {
     if (req.session?.user) return next()
-    // esto se esta guardando en una cookie. por eso no me muestra el profile VER
     res.redirect('/')
 }
 router.get('/profile', auth, (req, res) => {
