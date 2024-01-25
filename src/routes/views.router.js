@@ -9,6 +9,7 @@ const router = Router()
 const productManager = new ProductManager()
 // login
 router.get('/', (req, res) => {
+    // AGREGAR: MIDDLEWARE PARA QUE REDIRIJA AL PROFILE SI ES QUE HAY UNA SESION ACTIVA
     if (req.session?.user) {
         res.redirect('/products')
     }

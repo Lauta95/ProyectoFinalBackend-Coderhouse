@@ -39,7 +39,7 @@ const initializePassport = () => {
         },
         (jwt_payload, done) => {
             if (jwt_payload) {
-                console.log('jwt TOKEN PAYLOAD: ', { jwt_payload });
+                // console.log('jwt TOKEN PAYLOAD: ', { jwt_payload });
                 return done(null, jwt_payload);
             } else {
                 console.error('jwt token not found');
@@ -153,7 +153,7 @@ const initializePassport = () => {
         async (username, password, done) => {
             try {
                 const user = await UserModel.findOne({ email: username })
-                console.log(user);
+                // console.log(user);
                 if (!user) {
 
                     console.error('user doesnt exists');
